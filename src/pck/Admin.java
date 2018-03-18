@@ -454,7 +454,7 @@ private void getVal(){
 
 private void criticalProduct(){
     try{
-        String sql = ("SELECT `ProductName` as \"Product Name\", `AdminID`, `SupplierID`, `ProductDescription`, "
+        String sql = ("SELECT `ProductID` as \"Product ID\", `ProductName` as \"Product Name\", `ProductDescription`, "
                         + "ProductCategory as ProductCategory, ProductQuantity, ProductPrice, ProductDate "
                         + "FROM `products` WHERE ProductQuantity <= '10'" );
         pst = Conn.prepareStatement(sql);
@@ -518,7 +518,6 @@ public Admin(){
         searchtxt = new javax.swing.JTextField();
         allproductsComboBox = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
-        cbxsearch = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         delete = new javax.swing.JLabel();
         urltxt = new javax.swing.JLabel();
@@ -685,6 +684,9 @@ public Admin(){
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchtxtKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchtxtKeyTyped(evt);
+            }
         });
 
         allproductsComboBox.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
@@ -697,14 +699,6 @@ public Admin(){
 
         jLabel2.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel2.setText("Filter:");
-
-        cbxsearch.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        cbxsearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Product Name", "ID", "Price" }));
-        cbxsearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxsearchActionPerformed(evt);
-            }
-        });
 
         jLabel1.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel1.setText("Search:");
@@ -737,10 +731,8 @@ public Admin(){
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cbxsearch, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
+                .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(allproductsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -758,7 +750,6 @@ public Admin(){
                             .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
                             .addComponent(allproductsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbxsearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)))
                     .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1527,44 +1518,14 @@ public Admin(){
     }//GEN-LAST:event_allproductsComboBoxActionPerformed
 
     private void searchtxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxtKeyReleased
-        if(cbxsearch.getSelectedIndex()==1){
-            try{
-                String sql = "Select `ProductName`, `ProductDescription`, ProductCategory, ProductQuantity, ProductPrice, ProductDate FROM `products` Where ProductID = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-
+        try{
+            String sql = "SELECT ProductID, `ProductName`, `ProductDescription`, ProductCategory, ProductQuantity, ProductPrice, ProductDate FROM `products` Where ProductName LIKE '%" + searchtxt.getText() + "%' OR ProductID LIKE '%" + searchtxt.getText() + "%' OR ProductPrice LIKE '%" + searchtxt.getText() + "%' OR ProductDescription LIKE '%" + searchtxt.getText() + "%' OR ProductQuantity LIKE '%" + searchtxt.getText() + "%' OR ProductCategory LIKE '%" + searchtxt.getText() + "%'";
+            pst = Conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            tb.setModel(DbUtils.resultSetToTableModel(rs));
             }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-        
-        else if(cbxsearch.getSelectedIndex()==0){
-            try{
-                String sql = "Select `ProductName`, `ProductDescription`, ProductCategory, ProductQuantity, ProductPrice, ProductDate FROM `products` Where ProductName = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-        
-        else if(cbxsearch.getSelectedIndex()==2){
-            try{
-                String sql = "Select `ProductName`, `ProductDescription`, ProductCategory, ProductQuantity, ProductPrice, ProductDate FROM `products` Where ProductPrice = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
+            catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_searchtxtKeyReleased
 
@@ -1623,7 +1584,7 @@ public Admin(){
         String tbClick = tb.getModel().getValueAt(row, 0).toString();
 
         try{
-            String sql = "delete from products where ProductName = '" + tbClick + "'";
+            String sql = "delete from products where ProductID = '" + tbClick + "'";
             int delete = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this item?","Delete", JOptionPane.YES_NO_OPTION);
             if(delete == JOptionPane.YES_OPTION){
             pst = Conn.prepareStatement(sql);
@@ -1650,10 +1611,6 @@ public Admin(){
         ImageIcon img1 = new ImageIcon(getClass().getResource("/images/sales.png"));
         tabpane1.setIconAt(1, img1);
     }//GEN-LAST:event_tabpane1MouseExited
-
-    private void cbxsearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxsearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbxsearchActionPerformed
 
     private void salesm2mActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesm2mActionPerformed
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd", Locale.getDefault());
@@ -1756,7 +1713,7 @@ public Admin(){
 
     private void AddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddProductActionPerformed
         PickupdesignNewProduct page = new PickupdesignNewProduct();
-        page.setVisible(true);
+        page.setVisible(true);   
         //this.setVisible(false);
     }//GEN-LAST:event_AddProductActionPerformed
 
@@ -1893,42 +1850,7 @@ public Admin(){
     }//GEN-LAST:event_searchtxt1ActionPerformed
 
     private void searchtxt1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxt1KeyReleased
-        if(cbxsearch.getSelectedIndex()==0){
-            try{
-                String sql = "Select `ProductID`, `ProductName`, `ProductPrice` FROM `products` Where ProductName = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-        else if(cbxsearch.getSelectedIndex()==1){
-            try{
-                String sql = "Select `ProductID`, `ProductName`, `ProductPrice` FROM `products` Where ProductID = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-        else if(cbxsearch.getSelectedIndex()==2){
-            try{
-                String sql = "Select `ProductID`, `ProductName`, `ProductPrice` FROM `products` Where ProductPrice = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
+        
     }//GEN-LAST:event_searchtxt1KeyReleased
 
     private void catcbxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_catcbxActionPerformed
@@ -2316,45 +2238,7 @@ public Admin(){
     }//GEN-LAST:event_minussActionPerformed
 
     private void searchtxt2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxt2KeyReleased
-        if(cbxsearch.getSelectedIndex()==1){
-            try{
-                String sql = "Select `ProductID`, `ProductName`, `ProductPrice` FROM `products` Where ProductID = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-
-        else if(cbxsearch.getSelectedIndex()==0){
-            try{
-                String sql = "Select `ProductID`, `ProductName`, `ProductPrice` FROM `products` Where ProductName = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-
-        else if(cbxsearch.getSelectedIndex()==2){
-            try{
-                String sql = "Select `ProductID`, `ProductName`, `ProductPrice` FROM `products` Where ProductPrice = ? ";
-                pst = Conn.prepareStatement(sql);
-                pst.setString(1, searchtxt.getText());
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
+       
     }//GEN-LAST:event_searchtxt2KeyReleased
 
     private void allproductsComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allproductsComboBox1ActionPerformed
@@ -2653,7 +2537,7 @@ public Admin(){
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void tbMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbMouseEntered
-        Update_table();
+
     }//GEN-LAST:event_tbMouseEntered
 
     private void tbMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbMouseExited
@@ -2667,6 +2551,10 @@ public Admin(){
     private void tbMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbMouseReleased
 
     }//GEN-LAST:event_tbMouseReleased
+
+    private void searchtxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxtKeyTyped
+        
+    }//GEN-LAST:event_searchtxtKeyTyped
     
     /**
      * @param args the command line arguments
@@ -2712,7 +2600,6 @@ public Admin(){
     private javax.swing.JComboBox allproductsComboBox1;
     private javax.swing.JComboBox catcbx;
     private javax.swing.JComboBox cbxall;
-    private javax.swing.JComboBox cbxsearch;
     private javax.swing.JComboBox cbxsearch1;
     private javax.swing.JComboBox cbxsearch2;
     private javax.swing.JComboBox cbxunit;

@@ -193,10 +193,8 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel1" min="-2" pref="80" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="searchtxt" min="-2" pref="151" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="cbxsearch" min="-2" pref="118" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
+                                  <Component id="searchtxt" min="-2" pref="281" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                                   <Component id="jLabel2" min="-2" pref="52" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="allproductsComboBox" min="-2" pref="141" max="-2" attributes="0"/>
@@ -216,7 +214,6 @@
                                               <Component id="searchtxt" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="allproductsComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="cbxsearch" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -237,6 +234,7 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchtxtActionPerformed"/>
                             <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="searchtxtKeyReleased"/>
+                            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="searchtxtKeyTyped"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JComboBox" name="allproductsComboBox">
@@ -262,23 +260,6 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Filter:"/>
                           </Properties>
-                        </Component>
-                        <Component class="javax.swing.JComboBox" name="cbxsearch">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Calibri" size="14" style="1"/>
-                            </Property>
-                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="3">
-                                <StringItem index="0" value="Product Name"/>
-                                <StringItem index="1" value="ID"/>
-                                <StringItem index="2" value="Price"/>
-                              </StringArray>
-                            </Property>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbxsearchActionPerformed"/>
-                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel1">
                           <Properties>
@@ -385,11 +366,11 @@
                             </Property>
                           </Properties>
                           <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbMouseClicked"/>
+                            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbMouseEntered"/>
+                            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbMouseExited"/>
                             <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbMousePressed"/>
                             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbMouseReleased"/>
-                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbMouseClicked"/>
-                            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbMouseExited"/>
-                            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbMouseEntered"/>
                           </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="Admin_tb"/>
