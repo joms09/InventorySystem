@@ -79,7 +79,7 @@ public int search(String id, String name) throws SQLException, ClassNotFoundExce
         connection = DriverManager.getConnection(url, "root", "");
         stt = connection.createStatement();
         st2 = connection.createStatement();
-        rs = st.executeQuery("Select * From admin Where adminID= '" + id + "'  " + "and fname = '" + name + "'");
+        rs = stt.executeQuery("Select * From admin Where AdminID= '" + id + "'  " + "and fname = '" + name + "'");
         if (rs != null)
             return 1;
         else
@@ -104,18 +104,40 @@ public void populateJTable(){
             rows[i][6] = list.get(i).getdate();
         }
         
+        MyQuery1 mqe = new MyQuery1();
+        ArrayList<Product3> lists = mqe.BindTable();
+        String[] columnNamee = {"ProductName", "ProductDescription",
+            "ProductCategory", "ProductPrice"};
+        Object[][] rowss = new Object[lists.size()][4];
+        for(int i = 0; i < lists.size(); i++){
+            rowss[i][0] = lists.get(i).getName();
+            rowss[i][1] = lists.get(i).getDescription();
+            rowss[i][2] = lists.get(i).getCategory();
+            rowss[i][3] = lists.get(i).getPrice();
+        }
+        
         TheModel model = new TheModel(rows, columnName);
+        TheModel model1 = new TheModel(rowss, columnNamee);
         tb.setModel(model);
+        tb1.setModel(model1);
         alignLeft(tb,0);
         alignLeft(tb,1);
         alignLeft(tb,2);
-        alignLeft(tb,3);       
+        alignLeft(tb,3);
+        alignLeft(tb1,0);
+        alignLeft(tb1,1);
+        alignLeft(tb1,2);
+        alignLeft(tb1,3); 
         DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
         leftRenderer.setHorizontalAlignment(JLabel.LEFT);
         JTableHeader header = tb.getTableHeader();
+        JTableHeader header1 = tb1.getTableHeader();
         leftRenderer.setForeground(tb.getForeground());
+        leftRenderer.setForeground(tb1.getForeground());
         leftRenderer.setBackground(header.getBackground());
+        leftRenderer.setBackground(header1.getBackground());
         leftRenderer.setFont(tb.getFont());
+        leftRenderer.setFont(tb1.getFont());
         leftRenderer.setBorder(UIManager.getBorder("TableHeader.cellBorder"));
         header.getColumnModel().getColumn(0).setHeaderRenderer(leftRenderer);
         header.getColumnModel().getColumn(1).setHeaderRenderer(leftRenderer);
@@ -124,8 +146,14 @@ public void populateJTable(){
         header.getColumnModel().getColumn(4).setHeaderRenderer(leftRenderer);
         header.getColumnModel().getColumn(5).setHeaderRenderer(leftRenderer);
         header.getColumnModel().getColumn(6).setHeaderRenderer(leftRenderer);
+        header1.getColumnModel().getColumn(0).setHeaderRenderer(leftRenderer);
+        header1.getColumnModel().getColumn(1).setHeaderRenderer(leftRenderer);
+        header1.getColumnModel().getColumn(2).setHeaderRenderer(leftRenderer);
+        header1.getColumnModel().getColumn(3).setHeaderRenderer(leftRenderer);
         setForeground(tb.getTableHeader().getForeground());
         setBackground(tb.getTableHeader().getBackground());
+        setForeground(tb1.getTableHeader().getForeground());
+        setBackground(tb1.getTableHeader().getBackground());
         //tb.setDefaultRenderer(Object.class, new MultiLineCellRenderer());
 }
 
@@ -510,7 +538,6 @@ public Admin(){
         jLabel4 = new javax.swing.JLabel();
         txtid = new javax.swing.JTextField();
         jDesktopPane1 = new javax.swing.JDesktopPane();
-        out = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         tabpane1 = new javax.swing.JTabbedPane();
         inventoryPanel = new javax.swing.JPanel();
@@ -544,11 +571,6 @@ public Admin(){
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         searchtxt1 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        catcbx = new javax.swing.JComboBox();
-        cbxsearch1 = new javax.swing.JComboBox();
-        sp1 = new javax.swing.JScrollPane();
-        tb1 = new javax.swing.JTable();
         sp2 = new javax.swing.JScrollPane();
         tbcart = new javax.swing.JTable();
         addbtn = new javax.swing.JButton();
@@ -571,6 +593,8 @@ public Admin(){
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         transactionId = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tb1 = new javax.swing.JTable();
         inventoryPanel1 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         searchtxt2 = new javax.swing.JTextField();
@@ -584,13 +608,9 @@ public Admin(){
         tb2 = new javax.swing.JTable();
         ViewSelectedItem1 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jLabel20 = new javax.swing.JLabel();
-        userId = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
         userName = new javax.swing.JTextField();
-        userPassword2 = new javax.swing.JPasswordField();
         userPassword = new javax.swing.JPasswordField();
         comboPosition = new javax.swing.JComboBox();
         jLabel24 = new javax.swing.JLabel();
@@ -599,6 +619,7 @@ public Admin(){
         jScrollPane2 = new javax.swing.JScrollPane();
         memberTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         jButton3.setText("jButton3");
 
@@ -630,27 +651,6 @@ public Admin(){
         getContentPane().setLayout(null);
 
         jDesktopPane1.setBackground(new java.awt.Color(51, 51, 255));
-
-        out.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/out1.png"))); // NOI18N
-        out.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                outMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                outMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                outMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                outMousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                outMouseReleased(evt);
-            }
-        });
-        jDesktopPane1.add(out);
-        out.setBounds(880, 10, 150, 40);
 
         jScrollPane7.setBackground(new java.awt.Color(153, 204, 255));
         jScrollPane7.setEnabled(false);
@@ -957,8 +957,8 @@ public Admin(){
         jPanel6.setBackground(new java.awt.Color(153, 204, 255));
         jPanel6.setFont(new java.awt.Font("Calibri", 1, 48)); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel6.setText("Search by:");
+        jLabel6.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel6.setText("Search:");
 
         searchtxt1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         searchtxt1.addActionListener(new java.awt.event.ActionListener() {
@@ -972,86 +972,28 @@ public Admin(){
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        jLabel7.setText("Filter:");
-
-        catcbx.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        catcbx.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Products", "Critical Products" }));
-        catcbx.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                catcbxActionPerformed(evt);
-            }
-        });
-
-        cbxsearch1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        cbxsearch1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Product Name", "ID", "Price" }));
-
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbxsearch1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(searchtxt1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(catcbx, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 282, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchtxt1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 508, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchtxt1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(catcbx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(cbxsearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel6))
                 .addContainerGap())
         );
 
         jPanel1.add(jPanel6);
         jPanel6.setBounds(40, 20, 904, 50);
-
-        sp1.setBackground(new java.awt.Color(204, 204, 255));
-        sp1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        tb1.setBackground(new java.awt.Color(153, 255, 255));
-        tb1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        tb1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tb1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
-        tb1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tb1MouseClicked(evt);
-            }
-        });
-        sp1.setViewportView(tb1);
-
-        jPanel1.add(sp1);
-        sp1.setBounds(40, 80, 760, 216);
 
         sp2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         sp2.setToolTipText("Click Cart to add/remove Item");
@@ -1225,15 +1167,36 @@ public Admin(){
         jLabel16.setBounds(750, 420, 57, 23);
 
         jLabel17.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel17.setText("Transaction Id:");
+        jLabel17.setText("Product Id:");
         jPanel1.add(jLabel17);
-        jLabel17.setBounds(70, 310, 112, 23);
+        jLabel17.setBounds(70, 310, 100, 23);
 
         transactionId.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         transactionId.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         transactionId.setEnabled(false);
         jPanel1.add(transactionId);
         transactionId.setBounds(210, 310, 100, 23);
+
+        tb1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tb1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tb1MouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tb1);
+
+        jPanel1.add(jScrollPane3);
+        jScrollPane3.setBounds(40, 70, 760, 220);
 
         tabpane1.addTab("Point of Sales", jPanel1);
 
@@ -1368,17 +1331,6 @@ public Admin(){
         jPanel4.setBackground(new java.awt.Color(153, 204, 255));
         jPanel4.setLayout(null);
 
-        jLabel20.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel20.setText("Id:");
-        jPanel4.add(jLabel20);
-        jLabel20.setBounds(210, 100, 20, 23);
-
-        userId.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        userId.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        userId.setEnabled(false);
-        jPanel4.add(userId);
-        userId.setBounds(380, 100, 170, 23);
-
         jLabel21.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel21.setText("Username:");
         jPanel4.add(jLabel21);
@@ -1388,19 +1340,10 @@ public Admin(){
         jLabel22.setText("Password:");
         jPanel4.add(jLabel22);
         jLabel22.setBounds(210, 160, 77, 23);
-
-        jLabel23.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel23.setText("Re-enter Password:");
-        jPanel4.add(jLabel23);
-        jLabel23.setBounds(210, 190, 146, 23);
-
-        userName.setText(" ");
         jPanel4.add(userName);
-        userName.setBounds(380, 130, 170, 20);
-        jPanel4.add(userPassword2);
-        userPassword2.setBounds(380, 190, 170, 20);
+        userName.setBounds(380, 120, 170, 30);
         jPanel4.add(userPassword);
-        userPassword.setBounds(380, 160, 170, 20);
+        userPassword.setBounds(380, 150, 170, 30);
 
         comboPosition.setBackground(new java.awt.Color(204, 255, 204));
         comboPosition.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
@@ -1411,12 +1354,12 @@ public Admin(){
             }
         });
         jPanel4.add(comboPosition);
-        comboPosition.setBounds(380, 220, 170, 23);
+        comboPosition.setBounds(380, 183, 170, 30);
 
         jLabel24.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel24.setText("Position");
         jPanel4.add(jLabel24);
-        jLabel24.setBounds(210, 220, 140, 20);
+        jLabel24.setBounds(210, 190, 140, 20);
 
         jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton5.setText("Register");
@@ -1426,7 +1369,7 @@ public Admin(){
             }
         });
         jPanel4.add(jButton5);
-        jButton5.setBounds(320, 270, 110, 25);
+        jButton5.setBounds(290, 240, 110, 25);
 
         tabpane1.addTab("Register", jPanel4);
 
@@ -1485,6 +1428,16 @@ public Admin(){
 
         jDesktopPane1.add(jScrollPane7);
         jScrollPane7.setBounds(20, 50, 1000, 630);
+
+        jButton2.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton2.setText("LOG OUT");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jDesktopPane1.add(jButton2);
+        jButton2.setBounds(883, 20, 110, 31);
 
         getContentPane().add(jDesktopPane1);
         jDesktopPane1.setBounds(0, 0, 1050, 710);
@@ -1789,35 +1742,6 @@ public Admin(){
         
     }//GEN-LAST:event_ViewSelectedItemActionPerformed
 
-    private void outMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_outMouseReleased
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/out1.png"));
-        out.setIcon(img);
-    }//GEN-LAST:event_outMouseReleased
-
-    private void outMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_outMousePressed
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/out3.png"));
-        out.setIcon(img);
-    }//GEN-LAST:event_outMousePressed
-
-    private void outMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_outMouseExited
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/out1.png"));
-        out.setIcon(img);
-    }//GEN-LAST:event_outMouseExited
-
-    private void outMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_outMouseEntered
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/out2.png"));
-        out.setIcon(img);
-    }//GEN-LAST:event_outMouseEntered
-
-    private void outMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_outMouseClicked
-        LoginLogin logg = new LoginLogin();
-        int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to sign out?");
-        if(choice == 0){
-            logg.setVisible(true);
-            this.dispose();
-        }
-    }//GEN-LAST:event_outMouseClicked
-
         
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         int row = memberTable.getSelectedRow();
@@ -1850,79 +1774,16 @@ public Admin(){
     }//GEN-LAST:event_searchtxt1ActionPerformed
 
     private void searchtxt1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxt1KeyReleased
-        
-    }//GEN-LAST:event_searchtxt1KeyReleased
-
-    private void catcbxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_catcbxActionPerformed
-        String products = (String)catcbx.getSelectedItem();
         try{
-            if(products.equals("All Products")){
-                Update_table();
-            }
-            else if(products.equals("Critical Products")){
-                criticalProduct();
-            }
-            else{
-                String sql ="SELECT `ProductID`, `ProductName` as \"Product Name\", `ProductPrice`, ProductQuantity as "
-                        + "Product Quantity FROM `products` WHERE ProductCategory = '" + products + "'";
-                pst = Conn.prepareStatement(sql);
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-        }
-
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }//GEN-LAST:event_catcbxActionPerformed
-
-    private void tb1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb1MouseClicked
-        pluss.setEnabled(false);
-        minuss.setEnabled(false);
-        addbtn.setEnabled(true);
-        int row = tb.getSelectedRow();
-        if(tbcart.getRowCount()==0){
-            try{
-                String tbclk = (tb.getModel().getValueAt(row, 0).toString());
-                String sql =  ("select * from products Where ProductID = '" + tbclk + "'  ");
-                //pst1 = Conn.prepareStatement(sql2);
-                pst = Conn.prepareStatement(sql);
-                rs = pst.executeQuery();
-                while(rs.next())
-                stocktxt.setText(rs.getString("ProductQuantity"));
+            String sql = "SELECT `ProductName`, `ProductDescription`, ProductCategory, ProductPrice FROM `products` Where ProductName LIKE '%" + searchtxt1.getText() + "%' OR ProductPrice LIKE '%" + searchtxt1.getText() + "%' OR ProductDescription LIKE '%" + searchtxt1.getText() + "%' OR ProductQuantity LIKE '%" + searchtxt1.getText() + "%' OR ProductCategory LIKE '%" + searchtxt1.getText() + "%'";
+            pst = Conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            tb1.setModel(DbUtils.resultSetToTableModel(rs));
             }
             catch(Exception e){
-                JOptionPane.showMessageDialog(null,e);
-            }
+            JOptionPane.showMessageDialog(null, e);
         }
-        else{
-            int roww = tbcart.getRowCount();
-            Object[] content = new Object[roww];
-            for (int i = 0; i < roww; i++){
-                content[i] = Integer.parseInt(tbcart.getValueAt(i, 0).toString());
-            }
-            int value_to_find= Integer.parseInt(tb.getModel().getValueAt(tb.getSelectedRow(), 0).toString()) ;
-            boolean exist = Arrays.asList(content).contains(value_to_find);
-            if (exist){
-                JOptionPane.showMessageDialog(null, "Item already in cart!");
-                addbtn.setEnabled(false);
-            }
-            else{
-                try{
-                    String tbclk = (tb.getModel().getValueAt(row, 0).toString());
-                    String sql =  ("select * from products Where ProductID = '" + tbclk + "'  ");
-                    //pst1 = Conn.prepareStatement(sql2);
-                    pst = Conn.prepareStatement(sql);
-                    rs = pst.executeQuery();
-                    while(rs.next())
-                    stocktxt.setText(rs.getString("ProductQuantity"));
-                }
-                catch(Exception e){
-                    JOptionPane.showMessageDialog(null,e);
-                }
-            }
-        }
-    }//GEN-LAST:event_tb1MouseClicked
+    }//GEN-LAST:event_searchtxt1KeyReleased
 
     private void tbcartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbcartMouseClicked
         pluss.setEnabled(true);
@@ -1934,7 +1795,7 @@ public Admin(){
 
     private void addbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbtnActionPerformed
         int multiple;
-        if(tb.getSelectedRow()==-1){
+        if(tb1.getSelectedRow()==-1){
             JOptionPane.showMessageDialog(null, "No item selected!");
         }
         else if(tbcart.getRowCount()==0){
@@ -1946,8 +1807,8 @@ public Admin(){
             remlbl.setEnabled(true);
 
             try{
-                int row = tb.getSelectedRow();
-                String tbclk = (tb.getModel().getValueAt(row, 0).toString());
+                int row = tb1.getSelectedRow();
+                String tbclk = (tb1.getModel().getValueAt(row, 0).toString());
                 //String tc = (tbcart.getModel().getValueAt(row, 0).toString());t
                 tbcart.getModel();
                 String sql =  ("select ProductID, ProductName, ProductPrice, ProductQuantity from products Where ProductID = '" + tbclk + "'  ");
@@ -2014,7 +1875,7 @@ public Admin(){
             for (int i = 0; i < roww; i++) {
                 content[i] = Integer.parseInt(tbcart.getValueAt(i, 0).toString());
             }
-            int value_to_find= Integer.parseInt(tb.getModel().getValueAt(tb.getSelectedRow(), 0).toString()) ;
+            int value_to_find= Integer.parseInt(tb1.getModel().getValueAt(tb1.getSelectedRow(), 0).toString()) ;
             boolean exist = Arrays.asList(content).contains(value_to_find);
             if (exist){
                 JOptionPane.showMessageDialog(null, "Item already in cart!");
@@ -2028,8 +1889,8 @@ public Admin(){
                 remlbl.setEnabled(true);
 
                 try{
-                    int row = tb.getSelectedRow();
-                    String tbclk = (tb.getModel().getValueAt(row, 0).toString());
+                    int row = tb1.getSelectedRow();
+                    String tbclk = (tb1.getModel().getValueAt(row, 0).toString());
                     //String tc = (tbcart.getModel().getValueAt(row, 0).toString());t
                     tbcart.getModel();
                     String sql =  ("select ProductID, ProductName, ProductPrice, ProductQuantity from products Where ProductID = '" + tbclk + "'  ");
@@ -2416,8 +2277,8 @@ public Admin(){
             try{
                 check = search(userName.getText(), userName.getText());
             }
-            catch (SQLException ex) {/*Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);*/}
-            catch (ClassNotFoundException ex) {/*Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);*/}
+            catch (SQLException ex) {}
+            catch (ClassNotFoundException ex) {}
 
             if (check == 1){
                 try{
@@ -2427,14 +2288,11 @@ public Admin(){
                         //userAge.setText(null);
                         userPassword.setText(null);
                     }
-                    if ((userName.getText().equals("")))
-                    JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
-
-                    else if(!(userPassword.getText().equals(userPassword2.getText()))){
-                        JOptionPane.showMessageDialog(null, "Password not matched", "Systemwatch Message", JOptionPane.ERROR_MESSAGE);
-                    }
+                    if ((userName.getText().equals(""))){
+                        JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
+                    }          
                     else{
-                        st.executeUpdate("Insert into admin(" + "adminID, fname," + "Password" + "userPosition" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
+                        pst.executeUpdate("Insert into admin(" + "fname," + "Password," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
                         //st2.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                         JOptionPane.showMessageDialog(null, "Account Created", "System Message", JOptionPane.INFORMATION_MESSAGE);
                         CustomerAcc.namelbl.setText(userName.getText());
@@ -2448,19 +2306,18 @@ public Admin(){
                     //userAge.setText(null);
                     userPassword.setText(null);
                 }
-            }
+            }     
         }
-
         else if(comboPosition.getSelectedItem().equals("SalesPerson"))
         {
-            int check = 0;
+            int check1 = 0;
             try{
-                check = search(userName.getText(), userName.getText());
+                check1 = search(userName.getText(), userName.getText());
             }
-            catch (SQLException ex) {/*Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);*/}
-            catch (ClassNotFoundException ex) {/*Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);*/}
+            catch (SQLException ex) {}
+            catch (ClassNotFoundException ex) {}
 
-            if (check == 1){
+            if (check1 == 1){
                 try{
                     if (userPassword.getText().equals("")){
                         JOptionPane.showMessageDialog(null, "Password must contain value", "System Message", JOptionPane.INFORMATION_MESSAGE);
@@ -2468,14 +2325,11 @@ public Admin(){
                         //userAge.setText(null);
                         userPassword.setText(null);
                     }
-                    if ((userName.getText().equals("")))
-                    JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
-
-                    else if(!(userPassword.getText().equals(userPassword2.getText()))){
-                        JOptionPane.showMessageDialog(null, "Password not matched", "Systemwatch Message", JOptionPane.ERROR_MESSAGE);
-                    }
+                    if ((userName.getText().equals(""))){
+                        JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
+                    }        
                     else{
-                        st.executeUpdate("Insert into admin(" + "adminID, fname," + "Password" + "userPosition" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
+                        pst.executeUpdate("Insert into admin(" + "fname," + "Password," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
                         //st2.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                         JOptionPane.showMessageDialog(null, "Account Created", "System Message", JOptionPane.INFORMATION_MESSAGE);
                         CustomerAcc.namelbl.setText(userName.getText());
@@ -2485,24 +2339,22 @@ public Admin(){
                 catch (SQLException ex){
                     //Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Record Already Exist", "System Message", JOptionPane.ERROR_MESSAGE);
-                    userId.setText(null);
                     userName.setText(null);
                     //userAge.setText(null);
                     userPassword.setText(null);
                 }
-            }
+            }     
         }
-
         else if(comboPosition.getSelectedItem().equals("WarehouseManager"))
         {
-            int check = 0;
+            int check2 = 0;
             try{
-                check = search(userName.getText(), userName.getText());
+                check2 = search(userName.getText(), userName.getText());
             }
-            catch (SQLException ex) {/*Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);*/}
-            catch (ClassNotFoundException ex) {/*Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);*/}
+            catch (SQLException ex) {}
+            catch (ClassNotFoundException ex) {};
 
-            if (check == 1){
+            if (check2 == 1){
                 try{
                     if (userPassword.getText().equals("")){
                         JOptionPane.showMessageDialog(null, "Password must contain value", "System Message", JOptionPane.INFORMATION_MESSAGE);
@@ -2510,14 +2362,11 @@ public Admin(){
                         //userAge.setText(null);
                         userPassword.setText(null);
                     }
-                    if ((userName.getText().equals("")))
-                    JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
-
-                    else if(!(userPassword.getText().equals(userPassword2.getText()))){
-                        JOptionPane.showMessageDialog(null, "Password not matched", "Systemwatch Message", JOptionPane.ERROR_MESSAGE);
-                    }
+                    if ((userName.getText().equals(""))){
+                        JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
+                    } 
                     else{
-                        st.executeUpdate("Insert into admin(" + "adminID, fname," + "Password" + "userPosition" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
+                        pst.executeUpdate("Insert into admin(" + "fname," + "Password," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
                         //st2.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                         JOptionPane.showMessageDialog(null, "Account Created", "System Message", JOptionPane.INFORMATION_MESSAGE);
                         CustomerAcc.namelbl.setText(userName.getText());
@@ -2527,7 +2376,6 @@ public Admin(){
                 catch (SQLException ex){
                     //Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Record Already Exist", "System Message", JOptionPane.ERROR_MESSAGE);
-                    userId.setText(null);
                     userName.setText(null);
                     //userAge.setText(null);
                     userPassword.setText(null);
@@ -2555,6 +2403,63 @@ public Admin(){
     private void searchtxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxtKeyTyped
         
     }//GEN-LAST:event_searchtxtKeyTyped
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        LoginLogin logg = new LoginLogin();
+        int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to log out?");
+        if(choice == 0){
+            logg.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tb1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb1MouseClicked
+        pluss.setEnabled(false);
+        minuss.setEnabled(false);
+        addbtn.setEnabled(true);
+        int row = tb1.getSelectedRow();
+        if(tb1.getRowCount()==0){
+            try{
+                String tbclk = (tb1.getModel().getValueAt(row, 0).toString());
+                String sql =  ("select ProductID, ProductName, ProductQuantity from products Where ProductID = '" + tbclk + "'");
+                //pst1 = Conn.prepareStatement(sql2);
+                pst = Conn.prepareStatement(sql);
+                rs = pst.executeQuery();
+                while(rs.next())
+                    stocktxt.setText(rs.getString("ProductQuantity"));
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);   
+            }
+        }
+        else{
+            int roww = tb1.getRowCount();
+            Object[] content = new Object[roww];
+            for (int i = 0; i < roww; i++){
+                content[i] = Integer.parseInt(tb1.getValueAt(i, 0).toString());
+            }
+            int value_to_find= Integer.parseInt(tb1.getModel().getValueAt(tb1.getSelectedRow(), 0).toString()) ;
+            boolean exist = Arrays.asList(content).contains(value_to_find);
+            if (exist){
+                JOptionPane.showMessageDialog(null, "Item already in cart!");
+                addbtn.setEnabled(false);
+            } 
+            else{
+                try{
+                    String tbclk = (tb1.getModel().getValueAt(row, 0).toString());
+                    String sql =  ("select ProductQuantity from products Where ProductID = '" + tbclk + "'  ");
+                    //pst1 = Conn.prepareStatement(sql2);
+                    pst = Conn.prepareStatement(sql);
+                    rs = pst.executeQuery();
+                    while(rs.next())
+                        stocktxt.setText(rs.getString("ProductQuantity"));
+                }
+                catch(Exception e){
+                    JOptionPane.showMessageDialog(null,e);
+                }
+            }
+        }
+    }//GEN-LAST:event_tb1MouseClicked
     
     /**
      * @param args the command line arguments
@@ -2598,9 +2503,7 @@ public Admin(){
     private javax.swing.JButton addbtn;
     private javax.swing.JComboBox allproductsComboBox;
     private javax.swing.JComboBox allproductsComboBox1;
-    private javax.swing.JComboBox catcbx;
     private javax.swing.JComboBox cbxall;
-    private javax.swing.JComboBox cbxsearch1;
     private javax.swing.JComboBox cbxsearch2;
     private javax.swing.JComboBox cbxunit;
     private javax.swing.JTextField changetxt;
@@ -2616,6 +2519,7 @@ public Admin(){
     private javax.swing.JPanel inventoryPanel;
     private javax.swing.JPanel inventoryPanel1;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JDesktopPane jDesktopPane1;
@@ -2631,14 +2535,11 @@ public Admin(){
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -2651,11 +2552,11 @@ public Admin(){
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTable memberTable;
     private javax.swing.JButton minuss;
-    private javax.swing.JLabel out;
     private javax.swing.JTextField paymenttxt;
     private javax.swing.JTable pickupTable;
     private javax.swing.JButton pluss;
@@ -2668,7 +2569,6 @@ public Admin(){
     private javax.swing.JTextField searchtxt;
     private javax.swing.JTextField searchtxt1;
     private javax.swing.JTextField searchtxt2;
-    private javax.swing.JScrollPane sp1;
     private javax.swing.JScrollPane sp2;
     private javax.swing.JTextField stocktxt;
     private javax.swing.JTabbedPane tabpane1;
@@ -2682,10 +2582,8 @@ public Admin(){
     private javax.swing.JTextField txtsales;
     private javax.swing.JLabel urltxt;
     private javax.swing.JLabel urltxt1;
-    public javax.swing.JTextField userId;
     private javax.swing.JTextField userName;
     private javax.swing.JPasswordField userPassword;
-    private javax.swing.JPasswordField userPassword2;
     // End of variables declaration//GEN-END:variables
 }
 
