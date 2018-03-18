@@ -83,10 +83,19 @@ public class PickupdesignViewProduct extends javax.swing.JFrame {
     }
     
     public PickupdesignViewProduct() {
+        //PickupdesignViewProduct(null);
+        //getId();
         initComponents();
         Conn = PickupdesignViewProduct.javaconnect.ConnecrDB();
         Update_table();
-        //getId();
+    }
+    
+    public PickupdesignViewProduct(String id) {
+        initComponents();
+        Conn = PickupdesignViewProduct.javaconnect.ConnecrDB();
+        Update_table();
+        
+        this.id = id;
     }
 
     private void getId() {
@@ -346,7 +355,7 @@ public class PickupdesignViewProduct extends javax.swing.JFrame {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String d = sdf.format(pickupDateChooser.getDate());
 
-                String sql = "UPDATE products set ProductName = '" +productname.getText()+ "', ProductDescription = '" +description.getText()+ "', ProductPrice = '" +price.getText()+ "', ProductQuantity = '" +quantity.getText()+ "', ProductCategory= '"+category.getText()+"', ProductUnit= '" +unitCombo.getSelectedItem()+"', ProductDate= '" +d+ "' WHERE ProductID = null" ;
+                String sql = "UPDATE products set ProductName = '" +productname.getText()+ "', ProductDescription = '" +description.getText()+ "', ProductPrice = '" +price.getText()+ "', ProductQuantity = '" +quantity.getText()+ "', ProductCategory= '"+category.getText()+"', ProductUnit= '" +unitCombo.getSelectedItem()+"', ProductDate= '" +d+ "' WHERE ProductID = " +id  ;
                 //pst.executeUpdate("Insert into store(" + "ID,Product_Name,description,Price,Qty,Unit," + "Date1" + ") VALUES ('" + productname.getText() + "','" + description.getText() + "','" + price.getText() + "','" + quantity.getText() + "','" + unitCombo.getSelectedItem() + "','" + sdf.format(pickupDateChooser.getDate()) + "')");
 
                 pst = connection.prepareStatement(sql);
@@ -357,6 +366,7 @@ public class PickupdesignViewProduct extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Record Updated");
                 this.dispose();
             } catch (Exception e) {
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, e);
             }
         }

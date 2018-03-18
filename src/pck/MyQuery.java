@@ -44,6 +44,7 @@ public class MyQuery {
             Product2 p;
             while(rs.next()){
                 p = new Product2(
+                        rs.getInt("ProductID"),
                         rs.getString("ProductName"),
                         rs.getString("ProductDescription"),
                         rs.getString("ProductCategory"),

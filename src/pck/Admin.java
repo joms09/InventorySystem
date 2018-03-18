@@ -91,19 +91,17 @@ public int search(String id, String name) throws SQLException, ClassNotFoundExce
 public void populateJTable(){
         MyQuery mq = new MyQuery();
         ArrayList<Product2> list = mq.BindTable();
-        String[] columnName = {"ProductName", "ProductDescription",
+        String[] columnName = {"ProductID", "ProductName", "ProductDescription",
             "ProductCategory", "ProductQuantity", "ProductPrice", "ProductDate"};
-        Object[][] rows = new Object[list.size()][6];
+        Object[][] rows = new Object[list.size()][7];
         for(int i = 0; i < list.size(); i++){
-            rows[i][0] = list.get(i).getName();
-            rows[i][1] = list.get(i).getDescription();
-            rows[i][2] = list.get(i).getCategory();
-            rows[i][3] = list.get(i).getQuantity();
-            rows[i][4] = list.get(i).getPrice();
-            rows[i][5] = list.get(i).getdate();
-            
-            
-            // rows[i][2] = list.get(i).getDef();
+            rows[i][0] = list.get(i).getProductId();
+            rows[i][1] = list.get(i).getName();
+            rows[i][2] = list.get(i).getDescription();
+            rows[i][3] = list.get(i).getCategory();
+            rows[i][4] = list.get(i).getQuantity();
+            rows[i][5] = list.get(i).getPrice();
+            rows[i][6] = list.get(i).getdate();
         }
         
         TheModel model = new TheModel(rows, columnName);
@@ -125,6 +123,7 @@ public void populateJTable(){
         header.getColumnModel().getColumn(3).setHeaderRenderer(leftRenderer);
         header.getColumnModel().getColumn(4).setHeaderRenderer(leftRenderer);
         header.getColumnModel().getColumn(5).setHeaderRenderer(leftRenderer);
+        header.getColumnModel().getColumn(6).setHeaderRenderer(leftRenderer);
         setForeground(tb.getTableHeader().getForeground());
         setBackground(tb.getTableHeader().getBackground());
         //tb.setDefaultRenderer(Object.class, new MultiLineCellRenderer());
@@ -391,7 +390,7 @@ private void Pickup(){
 
 private void Update_table(){
     try{
-        String sql = "SELECT `ProductName` as \"Product Name\", `ProductDescription`, "
+        String sql = "SELECT `ProductID` as \"Product ID\", `ProductName` as \"Product Name\", `ProductDescription`, "
                         + "ProductCategory as ProductCategory, ProductQuantity, ProductPrice, ProductDate "
                         + "FROM `products`";
         //String sql = ("Select * From Category Where id = '" + lb + "'  ");
@@ -1513,7 +1512,7 @@ public Admin(){
                 criticalProduct();
             }
             else{
-                String sql ="SELECT `ProductName` as \"Product Name\", `AdminID`, `SupplierID`, `ProductDescription`, "
+                String sql ="SELECT `ProductID` as \"Product ID\" `ProductName` as \"Product Name\", `AdminID`, `SupplierID`, `ProductDescription`, "
                         + "ProductCategory as ProductCategory, ProductQuantity, ProductPrice, ProductDate "
                         + "FROM `products` WHERE ProductCategory = '" + products + "'";
                 pst = Conn.prepareStatement(sql);
@@ -1767,12 +1766,12 @@ public Admin(){
         }
         else{
             try{
-                PickupdesignViewProduct page = new PickupdesignViewProduct();
-                page.setVisible(true);
                 //ViewProduct vp = new ViewProduct();
                 //vp.setVisible(true);
                 String productid = tableClick();
-                String sql = "SELECT `ProductName`, `ProductDescription`, `ProductPrice`, `ProductQuantity`, `ProductCategory`, `ProductUnit`, `ProductDate` FROM `products` WHERE ProductName = '"+ productid +"'";
+                PickupdesignViewProduct page = new PickupdesignViewProduct(productid);
+                page.setVisible(true);
+                String sql = "SELECT `ProductName`, `ProductDescription`, `ProductPrice`, `ProductQuantity`, `ProductCategory`, `ProductUnit`, `ProductDate` FROM `products` WHERE ProductID = '"+ productid +"'";
                 pst = Conn.prepareStatement(sql);
                // pst.setString(0, id);
                 rs = pst.executeQuery();
