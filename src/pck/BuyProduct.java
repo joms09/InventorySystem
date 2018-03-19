@@ -52,6 +52,7 @@ public class BuyProduct extends javax.swing.JFrame {
     //PreparedStatement st = null;
     private ImageIcon format = null;
     String id = "";
+    public int total1;
 
     public int search(String id, String name) throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
@@ -175,7 +176,7 @@ public class BuyProduct extends javax.swing.JFrame {
         category = new javax.swing.JTextField();
         payment = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        total = new javax.swing.JTextField();
+        totalTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         change = new javax.swing.JTextField();
@@ -261,6 +262,9 @@ public class BuyProduct extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 quantityKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                quantityKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 quantityKeyTyped(evt);
             }
@@ -320,6 +324,12 @@ public class BuyProduct extends javax.swing.JFrame {
         });
         jPanel1.add(category);
         category.setBounds(310, 160, 230, 30);
+
+        payment.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                paymentKeyReleased(evt);
+            }
+        });
         jPanel1.add(payment);
         payment.setBounds(310, 260, 230, 30);
 
@@ -327,8 +337,8 @@ public class BuyProduct extends javax.swing.JFrame {
         jLabel1.setText("Payment:");
         jPanel1.add(jLabel1);
         jLabel1.setBounds(90, 270, 80, 23);
-        jPanel1.add(total);
-        total.setBounds(310, 300, 230, 30);
+        jPanel1.add(totalTextField);
+        totalTextField.setBounds(310, 300, 230, 30);
 
         jLabel2.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel2.setText("Total:");
@@ -479,13 +489,46 @@ public class BuyProduct extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryMouseEntered
 
     private void quantityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityKeyPressed
-        quantity.getText();
-        price.getText();
-        int q = Integer.parseInt(quantity.getText());
-        int p = Integer.parseInt(price.getText());
-        int total = p * q;
-        total.setText(""+total);
+        
     }//GEN-LAST:event_quantityKeyPressed
+
+    private void quantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityKeyReleased
+        int qty;
+        try{
+        if(unitCombo.getSelectedItem().toString().equals("PCS")){
+            qty = Integer.parseInt(quantity.getText().trim());
+            price.getText();
+            int p = Integer.parseInt(price.getText());
+            total1 = p * qty;
+            totalTextField.setText(String.valueOf(total1));
+        }
+        else if(unitCombo.getSelectedItem().toString().equals("Box")){
+            qty = Integer.parseInt(quantity.getText().trim())*50;
+            price.getText();
+            int p = Integer.parseInt(price.getText());
+            total1 = p * qty;
+            totalTextField.setText(String.valueOf(total1));
+        }
+        else if(unitCombo.getSelectedItem().toString().equals("Bundle")){
+            qty = Integer.parseInt(quantity.getText().trim())*25;
+            price.getText();
+            int p = Integer.parseInt(price.getText());
+            total1 = p * qty;
+            totalTextField.setText(String.valueOf(total1));
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+    }//GEN-LAST:event_quantityKeyReleased
+
+    private void paymentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_paymentKeyReleased
+        payment.getText();
+        int payment1 = Integer.parseInt(payment.getText());
+        int change1 = payment1 - total1;
+        change.setText(String.valueOf(change1));
+    }//GEN-LAST:event_paymentKeyReleased
 
     /**
      * @param args the command line arguments
@@ -577,7 +620,7 @@ public class BuyProduct extends javax.swing.JFrame {
     public static javax.swing.JTextField price;
     public static javax.swing.JTextField productname;
     public static javax.swing.JTextField quantity;
-    private javax.swing.JTextField total;
+    private javax.swing.JTextField totalTextField;
     public static javax.swing.JComboBox unitCombo;
     private javax.swing.JTextField userName;
     // End of variables declaration//GEN-END:variables
