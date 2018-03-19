@@ -163,54 +163,6 @@ private void alignLeft(JTable table, int column){
     table.getColumnModel().getColumn(column).setCellRenderer(leftRenderer);
 }
 
-public void  quantity(int qty1){
-        int row = tbcart.getSelectedRow();
-        int qty;
-        double price = Double.parseDouble(tbcart.getModel().getValueAt(row, 2).toString());
-        qty = Integer.parseInt(tbcart.getModel().getValueAt(row, 3).toString());
-        
-        int add2 = qty + Integer.parseInt(qtytxt.getText())*qty1;
-        double add = price + (price/qty)* (Double.parseDouble(qtytxt.getText())*qty1); 
-        double tota = (price/qty)* (Double.parseDouble(qtytxt.getText())*qty1);
-        double totalcost = tota + Double.parseDouble(costtxt.getText());
-        tbcart.getModel().setValueAt(add, row, 2);  
-        tbcart.getModel().setValueAt(add2, row, 3);  
-        costtxt.setText(Double.toString(totalcost));
-        int sto = Integer.parseInt(stocktxt.getText());
-        int totalstock = sto-Integer.parseInt(qtytxt.getText())*qty1;
-        tbcart.getModel().setValueAt(totalstock, row, 4);
-        stocktxt.setText(Integer.toString(totalstock));
-    }
-
-public void  quantity2(int qty1){
-        int row = tbcart.getSelectedRow();
-        
-        double price = Double.parseDouble(tbcart.getModel().getValueAt(row, 2).toString());
-        int qty = Integer.parseInt(tbcart.getModel().getValueAt(row, 3).toString());
-        double deduct = price - (price/qty)* (Double.parseDouble(qtytxt.getText()))*qty1;
-        int deduct2 = qty - (Integer.parseInt(qtytxt.getText()))*qty1;
-   
-        if(deduct<=0){
-            double diff = getSum()- Double.parseDouble(tbcart.getModel().getValueAt(row, 2).toString());
-            costtxt.setText(Double.toString(diff));
-            ((DefaultTableModel)tbcart.getModel()).removeRow(row);
-            stocktxt.setText("");
-        }
-        else{
-            double tota = (price/qty)* (Double.parseDouble(qtytxt.getText()))*qty1;
-            double totalcost = Double.parseDouble(costtxt.getText()) - tota; 
-            tbcart.getModel().setValueAt(deduct, row, 2);
-            tbcart.getModel().setValueAt(deduct2, row, 3);
-            int sto = Integer.parseInt(stocktxt.getText());
-            int totalstock = sto+Integer.parseInt(qtytxt.getText())*qty1;
-            tbcart.getModel().setValueAt(totalstock, row, 4);
-            stocktxt.setText(Integer.toString(totalstock));
-            costtxt.setText(Double.toString(totalcost));
-        }
-    }
-   
-    
-
 private void byproduct(){
     try{
         // int roww = salestbl.getRowCount();
@@ -226,7 +178,7 @@ private void byproduct(){
     catch(Exception e){}
 }
     
-public void getOrder(){
+/*public void getOrder(){
         try{
             String sql = "INSERT INTO `sales`(`SalesID`, `ProductID`, `SalesQuantity`, `SalesPrice`, `SalesDate`) VALUES(?,?,?,?,?)";
             //String sql2 = "INSERT INTO `sales2`(`ID`, `Product_Name`, `Price`, `Qty`, `Date`) VALUES (?,?,?,?,?)";
@@ -267,7 +219,7 @@ public void getOrder(){
         catch (Exception e){
             JOptionPane.showMessageDialog(null, e);
         }
-    } 
+    } */
 
 private void jtab(){
     try{
@@ -366,6 +318,24 @@ public String tableClick(){
         rs = pst.executeQuery();
         while(rs.next()){
             id = rs.getString("ProductID");             
+        }
+        return id;
+    }
+    catch (Exception e){
+        JOptionPane.showMessageDialog(null, e);
+    } 
+    return null;
+}
+
+public String tableClick1(){
+    try{
+        int row = tb1.getSelectedRow();
+        String tbClick = tb1.getModel().getValueAt(row, 0).toString();
+        String sql =  "Select `ProductID`, `ProductName`, `ProductDescription`, `ProductPrice`, `ProductQuantity`, `ProductCategory`, `ProductUnit`, `ProductDate` FROM `products` WHERE ProductName = '"+ tbClick +"'";
+        pst = Conn.prepareStatement(sql);
+        rs = pst.executeQuery();
+        while(rs.next()){
+            id = rs.getString("ProductName");             
         }
         return id;
     }
@@ -571,28 +541,7 @@ public Admin(){
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         searchtxt1 = new javax.swing.JTextField();
-        sp2 = new javax.swing.JScrollPane();
-        tbcart = new javax.swing.JTable();
-        addbtn = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        cbxunit = new javax.swing.JComboBox();
-        jLabel9 = new javax.swing.JLabel();
-        qtytxt = new javax.swing.JTextField();
-        clearbtn = new javax.swing.JButton();
-        purchasebtn = new javax.swing.JButton();
-        remlbl = new javax.swing.JLabel();
-        paymenttxt = new javax.swing.JTextField();
-        costtxt = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        pluss = new javax.swing.JButton();
-        minuss = new javax.swing.JButton();
-        stocktxt = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        changetxt = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        transactionId = new javax.swing.JTextField();
+        buyProductBtn = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tb1 = new javax.swing.JTable();
         inventoryPanel1 = new javax.swing.JPanel();
@@ -972,6 +921,15 @@ public Admin(){
             }
         });
 
+        buyProductBtn.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        buyProductBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cart.png"))); // NOI18N
+        buyProductBtn.setText("BUY PRODUCT");
+        buyProductBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyProductBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -980,202 +938,23 @@ public Admin(){
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchtxt1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 508, Short.MAX_VALUE))
+                .addGap(94, 94, 94)
+                .addComponent(buyProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 198, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(searchtxt1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(buyProductBtn))
                 .addContainerGap())
         );
 
         jPanel1.add(jPanel6);
-        jPanel6.setBounds(40, 20, 904, 50);
-
-        sp2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        sp2.setToolTipText("Click Cart to add/remove Item");
-        sp2.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-
-        tbcart.setBackground(new java.awt.Color(153, 255, 255));
-        tbcart.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        tbcart.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID", "Product Name", "Price", "Qty", "In stock", "Date"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tbcart.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbcartMouseClicked(evt);
-            }
-        });
-        sp2.setViewportView(tbcart);
-
-        jPanel1.add(sp2);
-        sp2.setBounds(40, 450, 760, 140);
-
-        addbtn.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        addbtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cart.png"))); // NOI18N
-        addbtn.setToolTipText("Add to Cart");
-        addbtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addbtnActionPerformed(evt);
-            }
-        });
-        jPanel1.add(addbtn);
-        addbtn.setBounds(460, 310, 70, 57);
-
-        jLabel8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel8.setText("Unit:");
-        jPanel1.add(jLabel8);
-        jLabel8.setBounds(70, 370, 37, 23);
-
-        cbxunit.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        cbxunit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "PCS", "Box", "Bundle" }));
-        jPanel1.add(cbxunit);
-        cbxunit.setBounds(210, 370, 100, 23);
-
-        jLabel9.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel9.setText("Quantity:");
-        jPanel1.add(jLabel9);
-        jLabel9.setBounds(70, 400, 71, 23);
-
-        qtytxt.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        qtytxt.setText("1");
-        jPanel1.add(qtytxt);
-        qtytxt.setBounds(210, 400, 100, 23);
-
-        clearbtn.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        clearbtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cartclear.png"))); // NOI18N
-        clearbtn.setToolTipText("Clear Cart");
-        clearbtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clearbtnActionPerformed(evt);
-            }
-        });
-        jPanel1.add(clearbtn);
-        clearbtn.setBounds(540, 310, 70, 59);
-
-        purchasebtn.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        purchasebtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/pay.png"))); // NOI18N
-        purchasebtn.setText("Purchase");
-        purchasebtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                purchasebtnActionPerformed(evt);
-            }
-        });
-        jPanel1.add(purchasebtn);
-        purchasebtn.setBounds(650, 300, 150, 50);
-
-        remlbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Button-Delete-icon.png"))); // NOI18N
-        remlbl.setToolTipText("Remove Selected Item");
-        remlbl.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                remlblMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                remlblMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                remlblMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                remlblMousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                remlblMouseReleased(evt);
-            }
-        });
-        jPanel1.add(remlbl);
-        remlbl.setBounds(470, 390, 32, 32);
-
-        paymenttxt.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        paymenttxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel1.add(paymenttxt);
-        paymenttxt.setBounds(650, 390, 90, 23);
-
-        costtxt.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        costtxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        costtxt.setEnabled(false);
-        jPanel1.add(costtxt);
-        costtxt.setBounds(650, 360, 90, 23);
-
-        jLabel10.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel10.setText("Payment");
-        jPanel1.add(jLabel10);
-        jLabel10.setBounds(750, 390, 68, 23);
-
-        jLabel11.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel11.setText("Total");
-        jPanel1.add(jLabel11);
-        jLabel11.setBounds(750, 360, 38, 23);
-
-        pluss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add.png"))); // NOI18N
-        pluss.setToolTipText("Add quantity");
-        pluss.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                plussActionPerformed(evt);
-            }
-        });
-        jPanel1.add(pluss);
-        pluss.setBounds(360, 330, 36, 39);
-
-        minuss.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/red.png"))); // NOI18N
-        minuss.setToolTipText("Reduce Quantity");
-        minuss.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                minussActionPerformed(evt);
-            }
-        });
-        jPanel1.add(minuss);
-        minuss.setBounds(360, 390, 36, 41);
-
-        stocktxt.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        stocktxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        stocktxt.setEnabled(false);
-        jPanel1.add(stocktxt);
-        stocktxt.setBounds(210, 337, 100, 23);
-
-        jLabel12.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel12.setText("Stock Available:");
-        jPanel1.add(jLabel12);
-        jLabel12.setBounds(70, 340, 120, 23);
-
-        changetxt.setEditable(false);
-        changetxt.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        changetxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        changetxt.setEnabled(false);
-        jPanel1.add(changetxt);
-        changetxt.setBounds(650, 420, 90, 23);
-
-        jLabel16.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel16.setText("Change");
-        jPanel1.add(jLabel16);
-        jLabel16.setBounds(750, 420, 57, 23);
-
-        jLabel17.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel17.setText("Product Id:");
-        jPanel1.add(jLabel17);
-        jLabel17.setBounds(70, 310, 100, 23);
-
-        transactionId.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        transactionId.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        transactionId.setEnabled(false);
-        jPanel1.add(transactionId);
-        transactionId.setBounds(210, 310, 100, 23);
+        jPanel6.setBounds(40, 20, 904, 79);
 
         tb1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1196,7 +975,7 @@ public Admin(){
         jScrollPane3.setViewportView(tb1);
 
         jPanel1.add(jScrollPane3);
-        jScrollPane3.setBounds(40, 70, 760, 220);
+        jScrollPane3.setBounds(40, 120, 760, 400);
 
         tabpane1.addTab("Point of Sales", jPanel1);
 
@@ -1785,319 +1564,6 @@ public Admin(){
         }
     }//GEN-LAST:event_searchtxt1KeyReleased
 
-    private void tbcartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbcartMouseClicked
-        pluss.setEnabled(true);
-        minuss.setEnabled(true);
-        addbtn.setEnabled(false);
-        int row = tbcart.getSelectedRow();
-        stocktxt.setText(tbcart.getModel().getValueAt(row, 4).toString());
-    }//GEN-LAST:event_tbcartMouseClicked
-
-    private void addbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbtnActionPerformed
-        int multiple;
-        if(tb1.getSelectedRow()==-1){
-            JOptionPane.showMessageDialog(null, "No item selected!");
-        }
-        else if(tbcart.getRowCount()==0){
-            changetxt.setEnabled(true);
-            costtxt.setEnabled(true);
-            paymenttxt.setEnabled(true);
-            purchasebtn.setEnabled(true);
-            clearbtn.setEnabled(true);
-            remlbl.setEnabled(true);
-
-            try{
-                int row = tb1.getSelectedRow();
-                String tbclk = (tb1.getModel().getValueAt(row, 0).toString());
-                //String tc = (tbcart.getModel().getValueAt(row, 0).toString());t
-                tbcart.getModel();
-                String sql =  ("select ProductID, ProductName, ProductPrice, ProductQuantity from products Where ProductID = '" + tbclk + "'  ");
-                //pst1 = Conn.prepareStatement(sql2);
-                pst = Conn.prepareStatement(sql);
-                rs = pst.executeQuery();
-                int qty;
-                //String s = cbxunit.getSelectedItem().toString();
-                //rs1 = pst1.executeQuery();
-                //tbcart.setModel(DbUtils.resultSetToTableModel(rs1));
-                while(rs.next()){
-                    int avtxt = Integer.parseInt(stocktxt.getText());
-                    if(cbxunit.getSelectedIndex()==1){
-                        if(avtxt<15){
-                            JOptionPane.showMessageDialog(null, "Sorry this item is limited!");
-                        }
-                        else{
-                            qty  =Integer.parseInt(qtytxt.getText());
-                            multiple = qty * 15;
-                            double pricemultiple = (double)multiple * Double.parseDouble(rs.getString("ProductPrice"));
-                            int sto = avtxt-multiple;
-                            stocktxt.setText(Integer.toString(sto));
-                            DefaultTableModel dtm = (DefaultTableModel)tbcart.getModel();
-                            dtm.addRow(new Object[] { rs.getString("ProductID"), rs.getString("ProductName"),pricemultiple, multiple,sto,getCurrentDate() });
-                        }
-                    }
-                    else if(cbxunit.getSelectedIndex()==2){
-                        if(avtxt<10){
-                            JOptionPane.showMessageDialog(null, "Sorry this item is limited!");
-                        }
-                        else{
-                            qty  =Integer.parseInt(qtytxt.getText());
-                            multiple = qty * 10;
-                            double pricemultiple = (double)multiple * Double.parseDouble(rs.getString("ProductPrice"));
-                            int sto = avtxt-multiple;
-                            stocktxt.setText(Integer.toString(sto));
-                            DefaultTableModel dtm = (DefaultTableModel)tbcart.getModel();
-                            dtm.addRow(new Object[] { rs.getString("ProductID"), rs.getString("ProductName"),pricemultiple, multiple,sto,getCurrentDate() });
-                        }
-                    }
-                    else if(cbxunit.getSelectedIndex()==0){
-                        if(avtxt<=0){
-                            JOptionPane.showMessageDialog(null, "Sorry this item is out of stock!");
-                        }
-                        else{
-                            multiple  =Integer.parseInt(qtytxt.getText());
-                            double pricemultiple = (double)multiple * Double.parseDouble(rs.getString("ProductPrice"));
-                            int sto = avtxt-multiple;
-                            stocktxt.setText(Integer.toString(sto));
-                            DefaultTableModel dtm = (DefaultTableModel)tbcart.getModel();
-                            dtm.addRow(new Object[] { rs.getString("ProductID"), rs.getString("ProductName"),pricemultiple, multiple,sto,getCurrentDate() });
-                        }
-                    }
-                }
-            }
-            catch (Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
-
-        else if(tbcart.getRowCount()!=0){
-            int roww = tbcart.getRowCount();
-            Object[] content = new Object[roww];
-            for (int i = 0; i < roww; i++) {
-                content[i] = Integer.parseInt(tbcart.getValueAt(i, 0).toString());
-            }
-            int value_to_find= Integer.parseInt(tb1.getModel().getValueAt(tb1.getSelectedRow(), 0).toString()) ;
-            boolean exist = Arrays.asList(content).contains(value_to_find);
-            if (exist){
-                JOptionPane.showMessageDialog(null, "Item already in cart!");
-            }
-            else{
-                changetxt.setEnabled(true);
-                costtxt.setEnabled(true);
-                paymenttxt.setEnabled(true);
-                purchasebtn.setEnabled(true);
-                clearbtn.setEnabled(true);
-                remlbl.setEnabled(true);
-
-                try{
-                    int row = tb1.getSelectedRow();
-                    String tbclk = (tb1.getModel().getValueAt(row, 0).toString());
-                    //String tc = (tbcart.getModel().getValueAt(row, 0).toString());t
-                    tbcart.getModel();
-                    String sql =  ("select ProductID, ProductName, ProductPrice, ProductQuantity from products Where ProductID = '" + tbclk + "'  ");
-                    //pst1 = Conn.prepareStatement(sql2);
-                    pst = Conn.prepareStatement(sql);
-                    rs = pst.executeQuery();
-                    int qty;
-                    //String s = cbxunit.getSelectedItem().toString();
-                    //rs1 = pst1.executeQuery();
-                    //tbcart.setModel(DbUtils.resultSetToTableModel(rs1));
-                    while(rs.next()){
-                        int avtxt = Integer.parseInt(stocktxt.getText());
-                        if(cbxunit.getSelectedIndex()==1){
-                            if(avtxt<15){
-                                JOptionPane.showMessageDialog(null, "Sorry this item is limited!");
-                            }
-                            else{
-                                qty  =Integer.parseInt(qtytxt.getText());
-                                multiple = qty * 15;
-                                double pricemultiple = (double)multiple * Double.parseDouble(rs.getString("ProductPrice"));
-                                int sto = avtxt-multiple;
-                                stocktxt.setText(Integer.toString(sto));
-                                DefaultTableModel dtm = (DefaultTableModel)tbcart.getModel();
-                                dtm.addRow(new Object[] { rs.getString("ProductID"), rs.getString("ProductName"),pricemultiple, multiple,sto,getCurrentDate() });
-                            }
-                        }
-                        else if(cbxunit.getSelectedIndex()==2){
-                            if(avtxt<10){
-                                JOptionPane.showMessageDialog(null, "Sorry this item is limited!");
-                            }
-                            else{
-                                qty  =Integer.parseInt(qtytxt.getText());
-                                multiple = qty * 10;
-                                double pricemultiple = (double)multiple * Double.parseDouble(rs.getString("ProductPrice"));
-                                int sto = avtxt-multiple;
-                                stocktxt.setText(Integer.toString(sto));
-                                DefaultTableModel dtm = (DefaultTableModel)tbcart.getModel();
-                                dtm.addRow(new Object[] { rs.getString("ProductID"), rs.getString("ProductName"),pricemultiple, multiple,sto,getCurrentDate() });
-                            }
-                        }
-                        else if(cbxunit.getSelectedIndex()==0){
-                            if(avtxt<=0){
-                                JOptionPane.showMessageDialog(null, "Sorry this item is out of stock!");
-                            }
-                            else{
-                                multiple  =Integer.parseInt(qtytxt.getText());
-                                double pricemultiple = (double)multiple * Double.parseDouble(rs.getString("ProductPrice"));
-                                int sto = avtxt-multiple;
-                                stocktxt.setText(Integer.toString(sto));
-                                DefaultTableModel dtm = (DefaultTableModel)tbcart.getModel();
-                                dtm.addRow(new Object[] { rs.getString("ProductID"), rs.getString("ProductName"),pricemultiple, multiple,sto,getCurrentDate() });
-                            }
-                        }
-                    }
-                }
-                catch (Exception e){
-                    JOptionPane.showMessageDialog(null, e);
-                }
-            }
-        }
-        String ss = Double.toString(getSum());
-        costtxt.setText(ss);
-        //getOrder();
-    }//GEN-LAST:event_addbtnActionPerformed
-
-    private void clearbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearbtnActionPerformed
-        costtxt.setText("");
-        costtxt.setEnabled(false);
-        paymenttxt.setEnabled(false);
-        remlbl.setEnabled(false);
-        purchasebtn.setEnabled(false);
-        changetxt.setEnabled(false);
-        ((DefaultTableModel)tbcart.getModel()).setRowCount(0);
-    }//GEN-LAST:event_clearbtnActionPerformed
-
-    private void purchasebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasebtnActionPerformed
-        int rowc = tbcart.getRowCount();
-        if(rowc==0){
-            JOptionPane.showMessageDialog(null, "Cart is empty");
-        }
-        else if(paymenttxt.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null,"Please enter your payment!");
-        }
-        else{
-            double pay = Double.parseDouble(paymenttxt.getText())-Double.parseDouble(costtxt.getText());
-            if(pay<0){
-                JOptionPane.showMessageDialog(null,"Sorry your payment is not enough!");
-            }
-            else{
-                changetxt.setText(Double.toString(pay));
-                getOrder();
-                //pickUp();
-                stocktxt.setText("");
-                costtxt.setText("");
-                paymenttxt.setText("");
-                changetxt.setText("");
-                costtxt.setText("");
-                costtxt.setEnabled(false);
-                paymenttxt.setEnabled(false);
-                remlbl.setEnabled(false);
-                purchasebtn.setEnabled(false);
-                changetxt.setEnabled(false);
-                //pickupDateChooser.setEnabled(false);
-                ((DefaultTableModel)tbcart.getModel()).setRowCount(0);
-                //PickUpPickUp page = new PickUpPickUp();
-                //page.setVisible(true);
-                //PickUpPickUp.userId.setText(transactionId.getText());
-                //PickUpPickUp.userPassword.setText(costtxt.getText());
-            }
-        }
-    }//GEN-LAST:event_purchasebtnActionPerformed
-
-    private void remlblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remlblMouseClicked
-        int rowc = tbcart.getRowCount();
-        if(rowc==0){
-            JOptionPane.showMessageDialog(null, "Cart is empty");
-        }
-        else if(tbcart.getSelectedRow()==-1){
-            JOptionPane.showMessageDialog(null, "Please choose an item to remove!");
-        }
-        else{
-            stocktxt.setText("");
-            int row = tbcart.getSelectedRow();
-            double re = Double.parseDouble(costtxt.getText()) - Double.parseDouble(tbcart.getModel().getValueAt(row, 3).toString());
-            costtxt.setText(Double.toString(re));
-            ((DefaultTableModel)tbcart.getModel()).removeRow(tbcart.getSelectedRow());
-        }
-    }//GEN-LAST:event_remlblMouseClicked
-
-    private void remlblMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remlblMouseEntered
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/delhover.png"));
-        remlbl.setIcon(img);
-    }//GEN-LAST:event_remlblMouseEntered
-
-    private void remlblMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remlblMouseExited
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/Button-Delete-icon.png"));
-        remlbl.setIcon(img);
-    }//GEN-LAST:event_remlblMouseExited
-
-    private void remlblMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remlblMousePressed
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/delext.png"));
-        remlbl.setIcon(img);
-    }//GEN-LAST:event_remlblMousePressed
-
-    private void remlblMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remlblMouseReleased
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/Button-Delete-icon.png"));
-        remlbl.setIcon(img);
-    }//GEN-LAST:event_remlblMouseReleased
-
-    private void plussActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plussActionPerformed
-        int row = tbcart.getSelectedRow();
-        if(tbcart.getRowCount()==0){
-            JOptionPane.showMessageDialog(null, "Cart is empty!");
-        }
-        else if(tbcart.getSelectedRow()==-1){
-            JOptionPane.showMessageDialog(null, "No item selected!" + "\n" + "Please choose from cart.");
-        }
-        else{
-            int avtxt = Integer.parseInt(stocktxt.getText());
-            if(cbxunit.getSelectedIndex()==1){
-                if(avtxt<15){
-                    JOptionPane.showMessageDialog(null, "Sorry this item is limited!" + "\n"+ "Try to add item per bundle or per piece");
-                }
-                else{
-                    quantity(15);}
-            }
-
-            else if(cbxunit.getSelectedIndex()==2){
-                if(avtxt<10){
-                    JOptionPane.showMessageDialog(null, "Sorry this item is limited!"+ "\n"+ "Try to add item per piece");
-                }
-                else{
-                    quantity(10);
-                }
-            }
-
-            else if(cbxunit.getSelectedIndex()==0){
-                if(avtxt<=0){
-                    JOptionPane.showMessageDialog(null, "Sorry this item is out of stock!");
-                }
-                else{
-                    quantity(1);
-                }
-            }
-        }
-    }//GEN-LAST:event_plussActionPerformed
-
-    private void minussActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minussActionPerformed
-        int row = tbcart.getSelectedRow();
-        if(tbcart.getRowCount()==0){
-            JOptionPane.showMessageDialog(null, "Cart is empty!");
-        }
-        else if(tbcart.getSelectedRow()==-1){
-            JOptionPane.showMessageDialog(null, "No item selected!" + "\n" + "Please choose from cart.");
-        }
-        else{
-            if(cbxunit.getSelectedIndex()==1){
-                quantity2(15);}
-            else if(cbxunit.getSelectedIndex()==2){
-                quantity2(10);
-            }
-            else if(cbxunit.getSelectedIndex()==0){
-                quantity2(1);
-            }
-        }
-    }//GEN-LAST:event_minussActionPerformed
-
     private void searchtxt2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxt2KeyReleased
        
     }//GEN-LAST:event_searchtxt2KeyReleased
@@ -2414,52 +1880,52 @@ public Admin(){
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void tb1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb1MouseClicked
-        pluss.setEnabled(false);
-        minuss.setEnabled(false);
-        addbtn.setEnabled(true);
         int row = tb1.getSelectedRow();
-        if(tb1.getRowCount()==0){
-            try{
-                String tbclk = (tb1.getModel().getValueAt(row, 0).toString());
-                String sql =  ("select ProductID, ProductName, ProductQuantity from products Where ProductID = '" + tbclk + "'");
-                //pst1 = Conn.prepareStatement(sql2);
-                pst = Conn.prepareStatement(sql);
-                rs = pst.executeQuery();
-                while(rs.next())
-                    stocktxt.setText(rs.getString("ProductQuantity"));
-            }
-            catch(Exception e){
-                JOptionPane.showMessageDialog(null,e);   
-            }
+        try{        
+//            PickupdesignViewProduct.productid.setText(rs.getString("ProductID"));
+            BuyProduct.productname.setText(rs.getString("ProductName"));
+            BuyProduct.description.setText(rs.getString("ProductDescription"));
+            BuyProduct.category.setText(rs.getString("ProductCategory"));
+            BuyProduct.price.setText(rs.getString("ProductPrice"));
+        }
+        catch(Exception e){}
+    }//GEN-LAST:event_tb1MouseClicked
+
+    private void buyProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyProductBtnActionPerformed
+        if(tb1.getSelectedRow()==-1){
+            JOptionPane.showMessageDialog(null, "Please choose an item to view!");
         }
         else{
-            int roww = tb1.getRowCount();
-            Object[] content = new Object[roww];
-            for (int i = 0; i < roww; i++){
-                content[i] = Integer.parseInt(tb1.getValueAt(i, 0).toString());
+            try{
+                //ViewProduct vp = new ViewProduct();
+                //vp.setVisible(true);
+                String productID = tableClick1();
+                BuyProduct page = new BuyProduct(productID);
+                page.setVisible(true);
+                String sql = "SELECT `ProductName`, `ProductDescription`, `ProductPrice`, `ProductQuantity`, `ProductCategory`, `ProductUnit`, `ProductDate` FROM `products` WHERE ProductName = '"+ productID +"'";
+                pst = Conn.prepareStatement(sql);
+               // pst.setString(0, id);
+                rs = pst.executeQuery();
+                while(rs.next()){
+                    //ViewProduct.txta1.setText(rs.getString("description"));
+                    //ImageIcon icon=new ImageIcon(rs.getString("imageurl"));
+                    //Image icoo = icon.getImage();
+                    //format=new ImageIcon(fix_it(icoo,ViewProduct.lbl1.getWidth(),ViewProduct.lbl1.getHeight()));
+                    //ViewProduct.lbl1.setIcon(format);
+                    BuyProduct.productname.setText(rs.getString("ProductName"));
+                    BuyProduct.description.setText(rs.getString("ProductDescription"));
+                    BuyProduct.category.setText(rs.getString("ProductCategory"));
+                    BuyProduct.price.setText(rs.getString("ProductPrice"));
+                    BuyProduct.quantity.setText(rs.getString("ProductQuantity"));
+                    BuyProduct.unitCombo.setSelectedItem(rs.getString("ProductUnit"));
+                }
+                
             }
-            int value_to_find= Integer.parseInt(tb1.getModel().getValueAt(tb1.getSelectedRow(), 0).toString()) ;
-            boolean exist = Arrays.asList(content).contains(value_to_find);
-            if (exist){
-                JOptionPane.showMessageDialog(null, "Item already in cart!");
-                addbtn.setEnabled(false);
-            } 
-            else{
-                try{
-                    String tbclk = (tb1.getModel().getValueAt(row, 0).toString());
-                    String sql =  ("select ProductQuantity from products Where ProductID = '" + tbclk + "'  ");
-                    //pst1 = Conn.prepareStatement(sql2);
-                    pst = Conn.prepareStatement(sql);
-                    rs = pst.executeQuery();
-                    while(rs.next())
-                        stocktxt.setText(rs.getString("ProductQuantity"));
-                }
-                catch(Exception e){
-                    JOptionPane.showMessageDialog(null,e);
-                }
+            catch  (Exception e){
+                JOptionPane.showMessageDialog(null, e);
             }
         }
-    }//GEN-LAST:event_tb1MouseClicked
+    }//GEN-LAST:event_buyProductBtnActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2500,16 +1966,12 @@ public Admin(){
     private javax.swing.JButton AddProduct;
     private javax.swing.JButton ViewSelectedItem;
     private javax.swing.JButton ViewSelectedItem1;
-    private javax.swing.JButton addbtn;
     private javax.swing.JComboBox allproductsComboBox;
     private javax.swing.JComboBox allproductsComboBox1;
+    private javax.swing.JButton buyProductBtn;
     private javax.swing.JComboBox cbxall;
     private javax.swing.JComboBox cbxsearch2;
-    private javax.swing.JComboBox cbxunit;
-    private javax.swing.JTextField changetxt;
-    private javax.swing.JButton clearbtn;
     private javax.swing.JComboBox comboPosition;
-    public static javax.swing.JTextField costtxt;
     private javax.swing.JPanel customersPanel;
     private javax.swing.JPanel customersPanel1;
     private javax.swing.JLabel delete;
@@ -2524,14 +1986,9 @@ public Admin(){
     private javax.swing.JButton jButton5;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -2540,8 +1997,6 @@ public Admin(){
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2556,28 +2011,18 @@ public Admin(){
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTable memberTable;
-    private javax.swing.JButton minuss;
-    private javax.swing.JTextField paymenttxt;
     private javax.swing.JTable pickupTable;
-    private javax.swing.JButton pluss;
-    private javax.swing.JButton purchasebtn;
-    private javax.swing.JTextField qtytxt;
-    private javax.swing.JLabel remlbl;
     private javax.swing.JButton salem2m;
     private javax.swing.JButton salesm2m;
     private javax.swing.JTable salestbl;
     private javax.swing.JTextField searchtxt;
     private javax.swing.JTextField searchtxt1;
     private javax.swing.JTextField searchtxt2;
-    private javax.swing.JScrollPane sp2;
-    private javax.swing.JTextField stocktxt;
     private javax.swing.JTabbedPane tabpane1;
     private javax.swing.JTable tb;
     private javax.swing.JTable tb1;
     private javax.swing.JTable tb2;
-    private javax.swing.JTable tbcart;
     private com.toedter.calendar.JDateChooser tom2;
-    public javax.swing.JTextField transactionId;
     public static javax.swing.JTextField txtid;
     private javax.swing.JTextField txtsales;
     private javax.swing.JLabel urltxt;
