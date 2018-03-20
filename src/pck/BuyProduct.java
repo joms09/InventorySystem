@@ -180,6 +180,8 @@ public class BuyProduct extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         change = new javax.swing.JTextField();
+        salesid = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         userName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -351,6 +353,13 @@ public class BuyProduct extends javax.swing.JFrame {
         jLabel3.setBounds(90, 350, 80, 23);
         jPanel1.add(change);
         change.setBounds(310, 340, 230, 30);
+        jPanel1.add(salesid);
+        salesid.setBounds(310, 10, 230, 30);
+
+        jLabel4.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel4.setText("Sales ID:");
+        jPanel1.add(jLabel4);
+        jLabel4.setBounds(90, 20, 200, 20);
 
         jDesktopPane1.add(jPanel1);
         jPanel1.setBounds(20, 50, 620, 480);
@@ -390,8 +399,8 @@ public class BuyProduct extends javax.swing.JFrame {
                 //String prod_id = productid.getText();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String d = sdf.format(pickupDateChooser.getDate());
-                String sql = "INSERT INTO sales (ProductID, SalesDescription, SalesQuantity, "
-                        + "SalesCategory, SalesPrice, SalesUnit, SalesDate, PickUpDate) values(null,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO sales (SalesID, ProductID, SalesDescription, SalesQuantity, "
+                        + "SalesCategory, SalesPrice, SalesUnit, SalesDate, PickUpDate) values(?, null,?,?,?,?,?,?,?)";
                 //String sql = "UPDATE products set ProductName = '" +productname.getText()+ "', ProductDescription = '" +description.getText()+ "', ProductPrice = '" +price.getText()+ "', ProductQuantity = '" +quantity.getText()+ "', ProductCategory= '"+category.getText()+"', ProductUnit= '" +unitCombo.getSelectedItem()+"', ProductDate= '" +d+ "' WHERE ProductID = " +id  ;
                 //pst.executeUpdate("Insert into store(" + "ID,Product_Name,description,Price,Qty,Unit," + "Date1" + ") VALUES ('" + productname.getText() + "','" + description.getText() + "','" + price.getText() + "','" + quantity.getText() + "','" + unitCombo.getSelectedItem() + "','" + sdf.format(pickupDateChooser.getDate()) + "')");
 
@@ -399,36 +408,30 @@ public class BuyProduct extends javax.swing.JFrame {
                 int qty;
                 double pricey = Double.parseDouble(price.getText());
                 
-                pst.setString(1, description.getText());
-                pst.setString(2, quantity.getText());
-                pst.setString(3, category.getText());
-                pst.setString(4, Double.toString(pricey));
+                pst.setString(1, salesid.getText());
+                pst.setString(2, description.getText());
+                pst.setString(3, quantity.getText());
+                pst.setString(4, category.getText());
+                pst.setString(5, Double.toString(pricey));
                 
                 if(unitCombo.getSelectedItem().toString().equals("PCS")){
                     qty = Integer.parseInt(quantity.getText().trim());
-                    pst.setString(5, Integer.toString(qty));
+                    pst.setString(6, Integer.toString(qty));
                 }
                 else if(unitCombo.getSelectedItem().toString().equals("Box")){
                     qty = Integer.parseInt(quantity.getText().trim())*50;
-                    pst.setString(5, Integer.toString(qty));
+                    pst.setString(6, Integer.toString(qty));
                 }
                 else if(unitCombo.getSelectedItem().toString().equals("Bundle")){
                     qty = Integer.parseInt(quantity.getText().trim())*25;
-                    pst.setString(5, Integer.toString(qty));
+                    pst.setString(6, Integer.toString(qty));
                 }
-                pst.setString(5, unitCombo.getSelectedItem().toString());
-                pst.setString(6, d);
-                pst.setString(7, pickupDateChooser.getDate().toString());
+                pst.setString(6, unitCombo.getSelectedItem().toString());
+                pst.setString(7, d);
+                pst.setString(8, d);
 
                 pst.execute();
-                JOptionPane.showMessageDialog(null, "Purchase Successful");
-                String minus = "Select ProductQuantity from products where ProductName = '"+productname+"'";
-                int q = Integer.parseInt(minus);
-                String get = quantity.getText();
-                int g = Integer.parseInt(get);
-                int now = q-g;
-                String todb = "INSERT INTO products (ProductQuantity) VALUES ('"+now+"') ";
-                pst.execute(todb);
+                JOptionPane.showMessageDialog(null, "Purchase Successful");                
                 productname.setText(null);
                 description.setText(null);
                 price.setText(null);
@@ -613,6 +616,7 @@ public class BuyProduct extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField payment;
@@ -620,6 +624,7 @@ public class BuyProduct extends javax.swing.JFrame {
     public static javax.swing.JTextField price;
     public static javax.swing.JTextField productname;
     public static javax.swing.JTextField quantity;
+    private javax.swing.JTextField salesid;
     private javax.swing.JTextField totalTextField;
     public static javax.swing.JComboBox unitCombo;
     private javax.swing.JTextField userName;
