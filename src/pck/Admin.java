@@ -345,6 +345,24 @@ public String tableClick1(){
     return null;
 }
 
+public String tableClick2(){
+    try{
+        int row = pickupTable1.getSelectedRow();
+        String tbClick = pickupTable1.getModel().getValueAt(row, 0).toString();
+        String sql =  "Select `SalesID`, `ProductID`, `SalesCategory`, `SalesPrice`, `SalesQuantity`, `SalesDate`, `Status` FROM `sales` WHERE SalesID = '"+ tbClick +"'";
+        pst = Conn.prepareStatement(sql);
+        rs = pst.executeQuery();
+        while(rs.next()){
+            id = rs.getString("SalesID");             
+        }
+        return id;
+    }
+    catch (Exception e){
+        JOptionPane.showMessageDialog(null, e);
+    } 
+    return null;
+}
+
 private Image fix_it(Image imeg,int w,int h){
     BufferedImage resizedImage=new    
     BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
@@ -375,7 +393,7 @@ private void Member(){
 
 private void Pickup(){
     try{
-        String sql = "select SalesID, ProductID as \"ProductID\", SalesCategory as \"SalesCategory\", SalesPrice as \"Total Price\", SalesQuantity as \"Quantity\", PickUpDate as \"Pick up date\" from sales";
+        String sql = "select SalesID, ProductID as \"ProductID\", SalesCategory as \"SalesCategory\", SalesPrice as \"Total Price\", SalesQuantity as \"Quantity\", PickUpDate as \"Pick up date\", Status as \"Status\" from sales";
         //String sql ="SELECT `Id`, `Total` as \"Total Price\", Date1 as Pick-up date FROM `pickup` WHERE category = '" + products + "'";
         pst = Conn.prepareStatement(sql);
         rs = pst.executeQuery();
@@ -404,16 +422,16 @@ private void Update_table(){
     }
 }
 
-private void Update_table_members(){
+private void Update_sales(){
     try{
-        String sql = "select AdminID, fname, Password from admin";
+        String sql = "SELECT `SalesID` as \"Sales ID\", `ProductID` as \"Product ID\", SalesQuantity, SalesPrice, SalesDate FROM `sales`";
         //String sql = ("Select * From Category Where id = '" + lb + "'  ");
         pst = Conn.prepareStatement(sql);
         rs = pst.executeQuery();
         //byte[]imagedata = rs.getBytes("image");
         //format = new ImageIcon(imagedata);
         //bglbl.setIcon(format);
-        memberTable.setModel(DbUtils.resultSetToTableModel(rs));
+        salestbl.setModel(DbUtils.resultSetToTableModel(rs));
     }
     catch(Exception e){
         JOptionPane.showMessageDialog(null, e);
@@ -484,6 +502,8 @@ public Admin(){
     byproduct();
     jtab();
     Update_table();
+    Update_sales();
+    Update_members();
     Member();
     Pickup();
 //    getId();
@@ -517,6 +537,7 @@ public Admin(){
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         delete = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
         urltxt = new javax.swing.JLabel();
         jScrollPane11 = new javax.swing.JScrollPane();
         tb = new javax.swing.JTable();
@@ -534,6 +555,7 @@ public Admin(){
         salesm2m = new javax.swing.JButton();
         tom2 = new com.toedter.calendar.JDateChooser();
         fromm1 = new com.toedter.calendar.JDateChooser();
+        refreshSales = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -541,18 +563,16 @@ public Admin(){
         buyProductBtn = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tb1 = new javax.swing.JTable();
+        refreshPOS = new javax.swing.JButton();
         inventoryPanel1 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         searchtxt2 = new javax.swing.JTextField();
-        allproductsComboBox1 = new javax.swing.JComboBox();
-        jLabel18 = new javax.swing.JLabel();
-        cbxsearch2 = new javax.swing.JComboBox();
         jLabel19 = new javax.swing.JLabel();
-        delete1 = new javax.swing.JLabel();
+        ref = new javax.swing.JButton();
+        ViewSelectedItem1 = new javax.swing.JButton();
         urltxt1 = new javax.swing.JLabel();
         jScrollPane12 = new javax.swing.JScrollPane();
         pickupTable1 = new javax.swing.JTable();
-        ViewSelectedItem1 = new javax.swing.JButton();
         customersPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         memberTable = new javax.swing.JTable();
@@ -672,6 +692,14 @@ public Admin(){
             }
         });
 
+        jButton4.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jButton4.setText("Refresh");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -685,7 +713,9 @@ public Admin(){
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(allproductsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(delete)
                 .addGap(23, 23, 23))
         );
@@ -699,7 +729,8 @@ public Admin(){
                             .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
                             .addComponent(allproductsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)))
+                            .addComponent(jLabel1)
+                            .addComponent(jButton4)))
                     .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -788,12 +819,12 @@ public Admin(){
             }
         });
         jPanel3.add(txtsales);
-        txtsales.setBounds(90, 30, 149, 30);
+        txtsales.setBounds(90, 70, 149, 30);
 
         jLabel13.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         jLabel13.setText("Total Sales");
         jPanel3.add(jLabel13);
-        jLabel13.setBounds(10, 35, 81, 20);
+        jLabel13.setBounds(10, 80, 81, 20);
 
         cbxall.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         cbxall.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "Today" }));
@@ -803,17 +834,17 @@ public Admin(){
             }
         });
         jPanel3.add(cbxall);
-        cbxall.setBounds(250, 30, 70, 26);
+        cbxall.setBounds(250, 70, 70, 26);
 
         jLabel14.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         jLabel14.setText("From:");
         jPanel3.add(jLabel14);
-        jLabel14.setBounds(340, 30, 39, 30);
+        jLabel14.setBounds(340, 70, 39, 30);
 
         jLabel15.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         jLabel15.setText("To:");
         jPanel3.add(jLabel15);
-        jLabel15.setBounds(570, 30, 21, 30);
+        jLabel15.setBounds(570, 70, 21, 30);
 
         salem2m.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
         salem2m.setText("Ok");
@@ -843,7 +874,7 @@ public Admin(){
         jScrollPane1.setViewportView(salestbl);
 
         jPanel3.add(jScrollPane1);
-        jScrollPane1.setBounds(10, 82, 790, 510);
+        jScrollPane1.setBounds(10, 122, 790, 470);
 
         salesm2m.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI18N
         salesm2m.setText("Go");
@@ -853,11 +884,21 @@ public Admin(){
             }
         });
         jPanel3.add(salesm2m);
-        salesm2m.setBounds(780, 30, 51, 29);
+        salesm2m.setBounds(780, 70, 51, 29);
         jPanel3.add(tom2);
-        tom2.setBounds(600, 30, 170, 30);
+        tom2.setBounds(600, 70, 170, 30);
         jPanel3.add(fromm1);
-        fromm1.setBounds(390, 30, 170, 30);
+        fromm1.setBounds(390, 70, 170, 30);
+
+        refreshSales.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        refreshSales.setText("Refresh");
+        refreshSales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshSalesActionPerformed(evt);
+            }
+        });
+        jPanel3.add(refreshSales);
+        refreshSales.setBounds(20, 20, 100, 30);
 
         tabpane1.addTab("Sales", jPanel3);
 
@@ -936,7 +977,17 @@ public Admin(){
         jScrollPane3.setViewportView(tb1);
 
         jPanel1.add(jScrollPane3);
-        jScrollPane3.setBounds(40, 120, 760, 400);
+        jScrollPane3.setBounds(40, 150, 760, 400);
+
+        refreshPOS.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        refreshPOS.setText("Refresh");
+        refreshPOS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshPOSActionPerformed(evt);
+            }
+        });
+        jPanel1.add(refreshPOS);
+        refreshPOS.setBounds(40, 110, 110, 25);
 
         tabpane1.addTab("Point of Sales", jPanel1);
 
@@ -952,45 +1003,22 @@ public Admin(){
             }
         });
 
-        allproductsComboBox1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        allproductsComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All Products", "Critical Products" }));
-        allproductsComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                allproductsComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jLabel18.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel18.setText("Filter:");
-
-        cbxsearch2.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        cbxsearch2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Product Name", "ID", "Price" }));
-        cbxsearch2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxsearch2ActionPerformed(evt);
-            }
-        });
-
         jLabel19.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel19.setText("Search:");
 
-        delete1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/del.png"))); // NOI18N
-        delete1.setToolTipText("Remove");
-        delete1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                delete1MouseClicked(evt);
+        ref.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        ref.setText("Refresh");
+        ref.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refActionPerformed(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                delete1MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                delete1MouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                delete1MousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                delete1MouseReleased(evt);
+        });
+
+        ViewSelectedItem1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        ViewSelectedItem1.setText("Edit Status");
+        ViewSelectedItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewSelectedItem1ActionPerformed(evt);
             }
         });
 
@@ -1002,16 +1030,12 @@ public Admin(){
                 .addContainerGap()
                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchtxt2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchtxt2, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(ref, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(cbxsearch2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63)
-                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(allproductsComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
-                .addComponent(delete1)
-                .addContainerGap())
+                .addComponent(ViewSelectedItem1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(99, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1021,11 +1045,10 @@ public Admin(){
                         .addContainerGap()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(searchtxt2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18)
-                            .addComponent(allproductsComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbxsearch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel19)))
-                    .addComponent(delete1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(ref, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                        .addComponent(ViewSelectedItem1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1055,16 +1078,6 @@ public Admin(){
 
         inventoryPanel1.add(jScrollPane12);
         jScrollPane12.setBounds(40, 110, 820, 470);
-
-        ViewSelectedItem1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        ViewSelectedItem1.setText("Edit Status");
-        ViewSelectedItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ViewSelectedItem1ActionPerformed(evt);
-            }
-        });
-        inventoryPanel1.add(ViewSelectedItem1);
-        ViewSelectedItem1.setBounds(20, 20, 150, 40);
 
         tabpane1.addTab("PickUps", inventoryPanel1);
 
@@ -1375,9 +1388,7 @@ public Admin(){
                 }
             }
            
-            String sql = ("SELECT  `SalesID`, `ProductID`, sum(`SalesQuantity`) as Total Quantity, "
-                    + "sum(`SalesPrice`) as Total Price, `SalesDate` FROM sales where SalesDate between "
-                    + "'" + d+ "' and'" + d1+ "' group by SalesID");
+            String sql = ("SELECT SalesID, ProductID, sum(SalesQuantity) as \"Total Quantity\", sum(SalesPrice) as \"Total Price\", SalesDate FROM sales where SalesDate between '" + d+ "' and '" + d1+ "' group by SalesID");
             pst = Conn.prepareStatement(sql);
             rs = pst.executeQuery();
             salestbl.setModel(DbUtils.resultSetToTableModel(rs));
@@ -1524,7 +1535,7 @@ public Admin(){
         catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
         }
-        Update_table_members();
+        Update_members();
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void txtsalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtsalesActionPerformed
@@ -1541,7 +1552,7 @@ public Admin(){
 
     private void searchtxt1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxt1KeyReleased
         try{
-            String sql = "SELECT `ProductName`, `ProductDescription`, ProductCategory, ProductPrice FROM `products` Where ProductName LIKE '%" + searchtxt1.getText() + "%' OR ProductPrice LIKE '%" + searchtxt1.getText() + "%' OR ProductDescription LIKE '%" + searchtxt1.getText() + "%' OR ProductQuantity LIKE '%" + searchtxt1.getText() + "%' OR ProductCategory LIKE '%" + searchtxt1.getText() + "%'";
+            String sql = "SELECT `ProductName`, `ProductDescription`, ProductCategory, ProductPrice FROM `products` Where ProductName LIKE '%" + searchtxt1.getText() + "%' OR ProductPrice LIKE '%" + searchtxt1.getText() + "%' OR ProductDescription LIKE '%" + searchtxt1.getText() + "%' OR ProductCategory LIKE '%" + searchtxt1.getText() + "%'";
             pst = Conn.prepareStatement(sql);
             rs = pst.executeQuery();
             tb1.setModel(DbUtils.resultSetToTableModel(rs));
@@ -1552,83 +1563,25 @@ public Admin(){
     }//GEN-LAST:event_searchtxt1KeyReleased
 
     private void searchtxt2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchtxt2KeyReleased
-       
+       try{
+            String sql = "SELECT `SalesID`, `ProductID`, SalesCategory, SalesPrice, SalesQuantity, PickUpDate, Status FROM `sales` Where SalesID LIKE '%" + searchtxt2.getText() + "%' OR ProductID LIKE '%" + searchtxt2.getText() + "%' OR SalesCategory LIKE '%" + searchtxt2.getText() + "%' OR SalesPrice LIKE '%" + searchtxt2.getText() + "%' OR SalesQuantity LIKE '%" + searchtxt2.getText() + "%' OR PickUpDate LIKE '%" + searchtxt2.getText() + "%' OR Status LIKE '%" + searchtxt2.getText() + "%'";
+            pst = Conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            pickupTable1.setModel(DbUtils.resultSetToTableModel(rs));
+            }
+            catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_searchtxt2KeyReleased
 
-    private void allproductsComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allproductsComboBox1ActionPerformed
-        String products = (String)allproductsComboBox.getSelectedItem();
-        try{
-            if(products.equals("All Products")){
-                Update_table();
-            }
-            else if(products.equals("Critical Products")){
-                criticalProduct();
-            }
-            else{
-                String sql ="SELECT `ProductID`, `ProductName` as \"Product Name\", `ProductPrice`, ProductQuantity as "
-                        + "Product Quantity FROM `products` WHERE ProductCategory = '" + products + "'";
-                pst = Conn.prepareStatement(sql);
-                rs = pst.executeQuery();
-                tb.setModel(DbUtils.resultSetToTableModel(rs));
-            }
-        }
-
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }//GEN-LAST:event_allproductsComboBox1ActionPerformed
-
-    private void cbxsearch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxsearch2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbxsearch2ActionPerformed
-
-    private void delete1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delete1MouseClicked
-        int row = tb.getSelectedRow();
-        String tbClick = tb.getModel().getValueAt(row, 0).toString();
-
-        try{
-            String sql = "delete from sales where SalesID = '" + tbClick + "'";
-            int delete = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this record?","Delete", JOptionPane.YES_NO_OPTION);
-            if(delete == JOptionPane.YES_OPTION){
-                pst = Conn.prepareStatement(sql);
-                pst.execute();
-                JOptionPane.showMessageDialog(null, "Deleted");}
-        }
-        catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-        Update_table();
-        getId();
-    }//GEN-LAST:event_delete1MouseClicked
-
-    private void delete1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delete1MouseEntered
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/del2.png"));
-        delete.setIcon(img);
-    }//GEN-LAST:event_delete1MouseEntered
-
-    private void delete1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delete1MouseExited
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/del.png"));
-        delete.setIcon(img);
-    }//GEN-LAST:event_delete1MouseExited
-
-    private void delete1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delete1MousePressed
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/del3.png"));
-        delete.setIcon(img);
-    }//GEN-LAST:event_delete1MousePressed
-
-    private void delete1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delete1MouseReleased
-        ImageIcon img = new ImageIcon(getClass().getResource("/images/del.png"));
-        delete.setIcon(img);
-    }//GEN-LAST:event_delete1MouseReleased
-
     private void pickupTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pickupTable1MouseClicked
-        int row = tb.getSelectedRow();
+        int row = pickupTable1.getSelectedRow();
         try{
             //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd", Locale.getDefault());
             //String d = sdf.format(pickupDateChooser.getDate());
 
-            String tbClick = tb.getModel().getValueAt(row, 0).toString();
-            String sql = ("Select fname, Password From sales Where SalesID = '" + tbClick + "'  ");
+            String tbClick = pickupTable1.getModel().getValueAt(row, 0).toString();
+            String sql = ("Select SalesID, ProductID, SalesCategory, SalesPrice, SalesQuantity, PickUpDate, Status From sales Where SalesID = '" + tbClick + "'  ");
             pst = Conn.prepareStatement(sql);
             rs = pst.executeQuery();
             while(rs.next()){
@@ -1640,10 +1593,8 @@ public Admin(){
             }
 
 //            PickupdesignViewProduct.productid.setText(rs.getString("ProductID"));
-            PickupdesignViewProduct.productname.setText(rs.getString("ProductName"));
-            PickupdesignViewProduct.description.setText(rs.getString("ProductDescription"));
-            PickupdesignViewProduct.price.setText(rs.getString("ProductPrice"));
-            PickupdesignViewProduct.quantity.setText(rs.getString("ProductQuantity"));
+            
+            PickupdesignAsChangeStatus.transactionId.setText(rs.getString("SalesID"));
 
             //PickupdesignViewProduct.unitCombo.setSelectedItem(unitCombo.getSelectedItem().toString());
             //PickupdesignViewProduct.productname.setText(costtxt.getText());
@@ -1652,7 +1603,7 @@ public Admin(){
     }//GEN-LAST:event_pickupTable1MouseClicked
 
     private void ViewSelectedItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewSelectedItem1ActionPerformed
-        if(tb.getSelectedRow()==-1){
+        if(pickupTable1.getSelectedRow()==-1){
             JOptionPane.showMessageDialog(null, "Please choose an item to view!");
         }
         else{
@@ -1661,8 +1612,8 @@ public Admin(){
                 page.setVisible(true);
                 //ViewProduct vp = new ViewProduct();
                 //vp.setVisible(true);
-                String id = tableClick();
-                String sql = ("Select * From sales Where SalesID = '" + id + "'  ");
+                String id = tableClick2();
+                String sql = ("Select SalesID, ProductID, SalesCategory, SalesPrice, SalesQuantity, PickUpDate, Status From sales Where SalesID = '" + id + "'  ");
                 pst = Conn.prepareStatement(sql);
                 rs = pst.executeQuery();
                 while(rs.next()){
@@ -1925,18 +1876,59 @@ public Admin(){
 
     private void userNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userNameKeyTyped
     }//GEN-LAST:event_userNameKeyTyped
-
-    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+    
+    
+    private void Update_members(){
         try{
-        String sql = "SELECT AdminID, fname, Password, userPosition from admin";
+        String sql = "SELECT AdminID, fname as \"Username\", Password, userPosition as \"User Position\" from admin";
         pst = Conn.prepareStatement(sql);
         rs = pst.executeQuery();
         memberTable.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
-    catch(Exception e){
-        JOptionPane.showMessageDialog(null, e);
-    }
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        Update_members();
     }//GEN-LAST:event_refreshActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        Update_table();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void refreshSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshSalesActionPerformed
+        try{
+            String sql = "SELECT SalesID, ProductID, SalesQuantity, SalesPrice, SalesDate from sales";
+            pst = Conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            salestbl.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_refreshSalesActionPerformed
+
+    private void refreshPOSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshPOSActionPerformed
+        try{
+            String sql = "SELECT ProductName, ProductDescription, ProductCategory, ProductPrice from products";
+            pst = Conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            tb1.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_refreshPOSActionPerformed
+
+    private void refActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refActionPerformed
+        try{
+            String sql = "SELECT SalesID, ProductID, SalesCategory, SalesPrice, SalesQuantity, PickUpDate, Status from sales";
+            pst = Conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            pickupTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_refActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1978,14 +1970,11 @@ public Admin(){
     private javax.swing.JButton ViewSelectedItem;
     private javax.swing.JButton ViewSelectedItem1;
     private javax.swing.JComboBox allproductsComboBox;
-    private javax.swing.JComboBox allproductsComboBox1;
     private javax.swing.JButton buyProductBtn;
     private javax.swing.JComboBox cbxall;
-    private javax.swing.JComboBox cbxsearch2;
     private javax.swing.JComboBox comboPosition;
     private javax.swing.JPanel customersPanel;
     private javax.swing.JLabel delete;
-    private javax.swing.JLabel delete1;
     private javax.swing.JDesktopPane dpane;
     private com.toedter.calendar.JDateChooser fromm1;
     private javax.swing.JPanel inventoryPanel;
@@ -1993,13 +1982,13 @@ public Admin(){
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
@@ -2023,7 +2012,10 @@ public Admin(){
     private javax.swing.JTable memberTable;
     private javax.swing.JTextField phone;
     private javax.swing.JTable pickupTable1;
+    private javax.swing.JButton ref;
     private javax.swing.JButton refresh;
+    private javax.swing.JButton refreshPOS;
+    private javax.swing.JButton refreshSales;
     private javax.swing.JButton salem2m;
     private javax.swing.JButton salesm2m;
     private javax.swing.JTable salestbl;

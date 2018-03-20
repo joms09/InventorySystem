@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.Locale;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
+import static pck.Admin.connection;
+import static pck.SignupAs3position.url;
 
 /**
  *
@@ -46,16 +48,19 @@ public class PickupdesignAsChangeStatus extends javax.swing.JFrame {
     PreparedStatement pst2 = null;
     PreparedStatement pst1 = null;
     PreparedStatement pst = null;
+    Statement stt = null;
+    Statement st2 = null;
     //PreparedStatement st = null;
     private ImageIcon format = null;
     String id = "";
     
     public int search(String id, String name) throws SQLException, ClassNotFoundException{
         Class.forName("com.mysql.jdbc.Driver");
-        url = "jdbc:mysql://localhost:3306/project";
+        url = "jdbc:mysql://localhost:3306/pos";
         connection = DriverManager.getConnection(url, "root", "");
-        st = connection.createStatement();
-        rs = st.executeQuery("Select * From login_tbl Where Id= '" + id + "'  " + "and username = '" + name + "'");
+        stt = connection.createStatement();
+        st2 = connection.createStatement();
+        rs = stt.executeQuery("Select * From admin Where AdminID= '" + id + "'  " + "and fname = '" + name + "'");
         if (rs != null)
             return 1;
         else
@@ -68,7 +73,7 @@ public class PickupdesignAsChangeStatus extends javax.swing.JFrame {
         public static Connection ConnecrDB(){
             try{
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection Conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/project","root","");
+                Connection Conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos","root","");
                 return Conn;
             }
             catch(Exception e){
@@ -77,311 +82,35 @@ public class PickupdesignAsChangeStatus extends javax.swing.JFrame {
             return null;
         }
     }
-    
-    /*public int tableClick2(){
-        try{
-            int count1 =0;
-            int row = tbcart.getSelectedRow();
-            int tbClick = Integer.parseInt(tbcart.getModel().getValueAt(row, 0).toString());
-            String sql =  ("Select * From sales Where count = '" + tbClick + "'  ");
-            pst = Conn.prepareStatement(sql);
-            rs = pst.executeQuery();
-            while(rs.next()){
-                count1 = rs.getInt("count");
-            }
-            return count1;
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        } 
-        return 0;
-    }*/
-    
-    /*public String tableClick(){
-        try{
-            int row = tb.getSelectedRow();
-            String tbClick = tb.getModel().getValueAt(row, 0).toString();
-            String sql =  ("Select * From store Where ID = '" + tbClick + "'  ");
-            pst = Conn.prepareStatement(sql);
-            rs = pst.executeQuery();
-            while(rs.next()){
-                id = rs.getString("ID");
-            }
-            return id;
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        } 
-        return null;
-    }*/
-    
-    /*public void getOrder(){
-        try{
-            String sql = "INSERT INTO `sales2`(`ID`, `Product_Name`, `Qty`, `Price`, `Date`) VALUES(?,?,?,?,?)";
-            //String sql2 = "INSERT INTO `sales2`(`ID`, `Product_Name`, `Price`, `Qty`, `Date`) VALUES (?,?,?,?,?)";
-            pst = Conn.prepareStatement(sql);
-            int roww = tbcart.getRowCount();
-            //qtytxt.setText(Integer.toString(roww));
-            for(int i = 0;i<roww;i++){
-                // int check = 0;
-                String id2 = tbcart.getModel().getValueAt(i, 0).toString();
-                String sql3 = "UPDATE `store` SET `Qty` = ? where ID = '" + id2 + "'";
-                pst3 = Conn.prepareStatement(sql3);
-                pst3.setString(1, tbcart.getModel().getValueAt(i, 4).toString());
-                //pst.setString(8,tbcart.getModel().getValueAt(i, 0).toString());
-                
-                pst.setString(1,tbcart.getModel().getValueAt(i, 0).toString());
-                pst.setString(1,transactionId.getText());
-                
-                pst.setString(2,tbcart.getModel().getValueAt(i, 1).toString());
-                pst.setString(5,tbcart.getModel().getValueAt(i, 5).toString());            
-                pst.setString(3,tbcart.getModel().getValueAt(i, 3).toString());
-                //pst.setString(3,tbcart.getModel().getValueAt(i, 5).toString());
-                pst.setString(4,tbcart.getModel().getValueAt(i, 2).toString());
-                //pst.setString(1,namelbl.getText());
-                pst.execute();
-                pst3.executeUpdate();
-            }
-            JOptionPane.showMessageDialog(null, "Purchase successful!");
-            PickUpPickUp page = new PickUpPickUp();
-            page.setVisible(true);
-            PickUpPickUp.transactionId.setText(transactionId.getText());
-            PickUpPickUp.cost.setText(costtxt.getText());
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }*/
-    
-    /*public void pickUp(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd", Locale.getDefault());
-        //String d = sdf.format(pickupDateChooser.getDate());
-        //JOptionPane.showMessageDialog(null, d);
-        try{
-            double pay = Double.parseDouble(paymenttxt.getText())-Double.parseDouble(costtxt.getText());
-            double cost = Double.parseDouble(costtxt.getText());
-            int rowc = tbcart.getRowCount();
-            if(rowc==0){
-                JOptionPane.showMessageDialog(null, "Cart is empty");
-            }
-            else if(paymenttxt.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null,"Please enter your payment!");
-            }
-            else{
-                if(pay<0){
-                    JOptionPane.showMessageDialog(null,"Sorry your payment is not enough!");
-                }
-                else{
-                    changetxt.setText(Double.toString(pay));
-                    JOptionPane.showMessageDialog(null, pay);
-                    JOptionPane.showMessageDialog(null, cost);
-                }
-            }
- 
-            //String sql = "INSERT INTO `pickup`(`Id`, `Total`, `Date1`, `Date2`) VALUES(?,?,?,?,?,?)";
-            //pst = Conn.prepareStatement(sql);
-            int roww = tbcart.getRowCount();
-            for(int i = 0;i<roww;i++){
-                String id2 = tbcart.getModel().getValueAt(i, 0).toString();
-                String sql3 = "UPDATE `store` SET `Qty` = ? where ID = '" + id2 + "'";
-                pst3 = Conn.prepareStatement(sql3);
-                pst3.setString(1, tbcart.getModel().getValueAt(i, 4).toString());
-                pst.setString(2,tbcart.getModel().getValueAt(i, 0).toString());
-                pst.setString(3,tbcart.getModel().getValueAt(i, 1).toString());
-                pst.setString(6,tbcart.getModel().getValueAt(i, 5).toString());            
-                pst.setString(4,tbcart.getModel().getValueAt(i, 3).toString());
-                pst.setString(5,tbcart.getModel().getValueAt(i, 2).toString());
-                pst.setString(1,namelbl.getText());
-                //JOptionPane.showMessageDialog(null, id2);
-                pst3.executeUpdate();
-                
-                //st.executeUpdate("INSERT INTO pickup(" + "Id,Total,Date1," + "Date2" + ") VALUES ('" + id2 + "','" + pay + "','" + d + "','" + d + "')");  
-            }
-            //st.executeUpdate("Insert into pickup(" + "Id,Total," + "Date1" + ") VALUES ('" + paymenttxt.getText() + "','" + costtxt.getText() + "','" + sdf.format(pickupDateChooser.getDate()) + "')");
-            JOptionPane.showMessageDialog(null, "Record Created", "System Message", JOptionPane.INFORMATION_MESSAGE);
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }*/
-    /*public int search(String id) throws SQLException, ClassNotFoundException
-    {
-        Class.forName("com.mysql.jdbc.Driver");
-        url = "jdbc:mysql://localhost:3306/project";
-        connection = DriverManager.getConnection(url, "root", "");
-        st1 = connection.createStatement();
-        rs22 = st1.executeQuery("Select * From sales2 Where ID= '" + id + "'");
-        if (rs22 != null)
-            return 1;
-        else
-            return 0;
-    }*/
-   
-    /*public double getSum(){
-        int rowsCount = tbcart.getRowCount();
-        double sum = 0;
-        for(int i = 0; i < rowsCount; i++){
-            sum = sum+Double.parseDouble(tbcart.getValueAt(i, 2).toString());
-        }
-        return sum;
-    }*/
-   
+
     /**
      * Creates new form CustomerAcc
      */
     public PickupdesignAsChangeStatus(){
         initComponents();
         Conn = PickupdesignAsChangeStatus.javaconnect.ConnecrDB();
-        Update_table();
-        //order_tbl();
-        //costtxt.setEditable(false);
-        //purchasebtn.setEnabled(false);
-        //remlbl.setEnabled(false);
-        //clearbtn.setEnabled(false);
-        //changetxt.setEnabled(false);
-        //costtxt.setEnabled(false);
-        //paymenttxt.setEnabled(false);
-        //pluss.setEnabled(false);
-        //minuss.setEnabled(false);   
         getId();
-        //tblmousemove();
-    }
-    
-    private static java.sql.Date getCurrentDate(){
-        java.util.Date today = new java.util.Date();
-        return new java.sql.Date(today.getTime());
     }
     
     private void getId(){
     String sum;
     try{
-        String sql = "SELECT max(ID) FROM login_tbl";
+        String sql = "SELECT max(adminID) FROM admin";
         pst = Conn.prepareStatement(sql);
         //pst.setString(1, searchtxt.getText());
         rs= pst.executeQuery();
         while(rs.next()){
             //rs.beforeFirst();
-            sum = rs.getString("max(ID)");
-            int identification = Integer.parseInt(sum)+1;
+            sum = rs.getString("max(adminID)");
+            int identification = Integer.parseInt(sum);
             transactionId.setText(Integer.toString(identification));
         }
     }
     catch (Exception e){
-        int identification = Integer.parseInt(transactionId.getText())+1;
+        int identification = Integer.parseInt(transactionId.getText());
         transactionId.setText(Integer.toString(identification));
     }   
 }
-    
-    public void getorders(){
-        try{
-            //int row = tb.getSelectedRow();
-            //String tbClick = tb.getModel().getValueAt(row, 0).toString();
-            //String sql =  ("Select * From store Where ID = '" + tbClick + "'  ");
-            //pst = Conn.prepareStatement(sql);
-            rs = pst.executeQuery();
-            while(rs.next()){
-                id = rs.getString("ID");
-            }
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-    
-    private void Update_table(){
-        try{
-            String sql = "select ID, Product_Name, Price from store";
-            pst = Conn.prepareStatement(sql);
-            rs = pst.executeQuery();
-            //tb.setModel(DbUtils.resultSetToTableModel(rs));
-        }
-        catch  (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-    
-    private void NewArr(){
-        try{
-            String sql = "select ID, Product_Name, Price from new_arrivals";
-            //String sql = ("Select * From Category Where id = '" + lb + "'  ");
-            pst = Conn.prepareStatement(sql);
-            rs = pst.executeQuery();
-            //byte[]imagedata = rs.getBytes("image");
-            //format = new ImageIcon(imagedata);
-            //bglbl.setIcon(format);
-            //tb.setModel(DbUtils.resultSetToTableModel(rs));
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-    
-    private Image fix_it(Image imeg,int w,int h){
-        BufferedImage resizedImage=new    
-        BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2=resizedImage.createGraphics();
-       
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        
-        g2.drawImage(imeg,0, 0, w,h,null);
-        g2.dispose();
-        return resizedImage;
-    }
-    
-    /*public void qq(int multiple,double price, double pricetb){
-        double pricemultiple = (double)multiple * price;
-        double adjust = pricemultiple - pricetb;
-        
-        double tot = Double.parseDouble(costtxt.getText());
-        double tott = tot + adjust;
-        costtxt.setText(Double.toString(tott));
-    }*/
-    
-    /*public void  quantity(int qty1){
-        int row = tbcart.getSelectedRow();
-        int qty;
-        double price = Double.parseDouble(tbcart.getModel().getValueAt(row, 2).toString());
-        qty = Integer.parseInt(tbcart.getModel().getValueAt(row, 3).toString());
-        
-        int add2 = qty + Integer.parseInt(qtytxt.getText())*qty1;
-        double add = price + (price/qty)* (Double.parseDouble(qtytxt.getText())*qty1); 
-        double tota = (price/qty)* (Double.parseDouble(qtytxt.getText())*qty1);
-        double totalcost = tota + Double.parseDouble(costtxt.getText());
-        tbcart.getModel().setValueAt(add, row, 2);  
-        tbcart.getModel().setValueAt(add2, row, 3);  
-        costtxt.setText(Double.toString(totalcost));
-        int sto = Integer.parseInt(stocktxt.getText());
-        int totalstock = sto-Integer.parseInt(qtytxt.getText())*qty1;
-        tbcart.getModel().setValueAt(totalstock, row, 4);
-        stocktxt.setText(Integer.toString(totalstock));
-    }*/
-    
-    /*public void  quantity2(int qty1){
-        int row = tbcart.getSelectedRow();
-        
-        double price = Double.parseDouble(tbcart.getModel().getValueAt(row, 2).toString());
-        int qty = Integer.parseInt(tbcart.getModel().getValueAt(row, 3).toString());
-        double deduct = price - (price/qty)* (Double.parseDouble(qtytxt.getText()))*qty1;
-        int deduct2 = qty - (Integer.parseInt(qtytxt.getText()))*qty1;
-   
-        if(deduct<=0){
-            double diff = getSum()- Double.parseDouble(tbcart.getModel().getValueAt(row, 2).toString());
-            costtxt.setText(Double.toString(diff));
-            ((DefaultTableModel)tbcart.getModel()).removeRow(row);
-            stocktxt.setText("");
-        }
-        else{
-            double tota = (price/qty)* (Double.parseDouble(qtytxt.getText()))*qty1;
-            double totalcost = Double.parseDouble(costtxt.getText()) - tota; 
-            tbcart.getModel().setValueAt(deduct, row, 2);
-            tbcart.getModel().setValueAt(deduct2, row, 3);
-            int sto = Integer.parseInt(stocktxt.getText());
-            int totalstock = sto+Integer.parseInt(qtytxt.getText())*qty1;
-            tbcart.getModel().setValueAt(totalstock, row, 4);
-            stocktxt.setText(Integer.toString(totalstock));
-            costtxt.setText(Double.toString(totalcost));
-        }
-    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -496,13 +225,13 @@ public class PickupdesignAsChangeStatus extends javax.swing.JFrame {
       
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            url = "jdbc:mysql://localhost:3306/project";
+            url = "jdbc:mysql://localhost:3306/pos";
             connection = DriverManager.getConnection(url, "root", "");
             String prod_id = transactionId.getText();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             //String d = sdf.format(pickupDateChooser.getDate());
 
-            String sql = "update pickup set Status = '" +jComboBox1.getSelectedItem()+ "'  where ID =  '" +prod_id+ "' " ;
+            String sql = "update sales set status = '" +jComboBox1.getSelectedItem()+ "'  where SalesID =  '" +prod_id+ "' " ;
             //pst.executeUpdate("Insert into store(" + "ID,Product_Name,description,Price,Qty,Unit," + "Date1" + ") VALUES ('" + productname.getText() + "','" + description.getText() + "','" + price.getText() + "','" + quantity.getText() + "','" + unitCombo.getSelectedItem() + "','" + sdf.format(pickupDateChooser.getDate()) + "')");
 
             pst = connection.prepareStatement(sql);
@@ -511,7 +240,8 @@ public class PickupdesignAsChangeStatus extends javax.swing.JFrame {
             //double pricey = Double.parseDouble(price.getText());
 
             pst.execute();
-            JOptionPane.showMessageDialog(null, "Saved");
+            JOptionPane.showMessageDialog(null, "Saved Successfully");
+            this.dispose();
         } 
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -523,9 +253,7 @@ public class PickupdesignAsChangeStatus extends javax.swing.JFrame {
     }//GEN-LAST:event_userNameActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        AdminTryAsPickUp pik = new AdminTryAsPickUp();
-        pik.setVisible(true);
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
