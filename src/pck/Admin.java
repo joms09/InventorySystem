@@ -357,7 +357,7 @@ private Image fix_it(Image imeg,int w,int h){
 
 private void Member(){
     try{
-        String sql = "select AdminID as \"AdminID\", fname as \"Username\", Password as \"Password\" from admin";
+        String sql = "select AdminID as \"AdminID\", fname as \"Username\", Password as \"Password\", userPosition as \"Position\" from admin";
         //String sql = ("Select * From Category Where id = '" + lb + "'  ");
         pst = Conn.prepareStatement(sql);
         rs = pst.executeQuery();
@@ -379,7 +379,7 @@ private void Pickup(){
         //String sql ="SELECT `Id`, `Total` as \"Total Price\", Date1 as Pick-up date FROM `pickup` WHERE category = '" + products + "'";
         pst = Conn.prepareStatement(sql);
         rs = pst.executeQuery();
-        pickupTable.setModel(DbUtils.resultSetToTableModel(rs));
+        pickupTable1.setModel(DbUtils.resultSetToTableModel(rs));
     }
     catch(Exception e){
         JOptionPane.showMessageDialog(null, e);
@@ -522,9 +522,6 @@ public Admin(){
         tb = new javax.swing.JTable();
         AddProduct = new javax.swing.JButton();
         ViewSelectedItem = new javax.swing.JButton();
-        customersPanel1 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        pickupTable = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         txtsales = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -554,8 +551,13 @@ public Admin(){
         delete1 = new javax.swing.JLabel();
         urltxt1 = new javax.swing.JLabel();
         jScrollPane12 = new javax.swing.JScrollPane();
-        tb2 = new javax.swing.JTable();
+        pickupTable1 = new javax.swing.JTable();
         ViewSelectedItem1 = new javax.swing.JButton();
+        customersPanel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        memberTable = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        refresh = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
@@ -564,10 +566,8 @@ public Admin(){
         comboPosition = new javax.swing.JComboBox();
         jLabel24 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
-        customersPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        memberTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        phone = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
 
         jButton3.setText("jButton3");
@@ -776,45 +776,6 @@ public Admin(){
         ViewSelectedItem.setBounds(180, 20, 150, 40);
 
         tabpane1.addTab("Inventory", inventoryPanel);
-
-        customersPanel1.setBackground(new java.awt.Color(153, 204, 255));
-
-        jScrollPane5.setBackground(new java.awt.Color(153, 255, 255));
-        jScrollPane5.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
-
-        pickupTable.setBackground(new java.awt.Color(153, 255, 255));
-        pickupTable.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        pickupTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane5.setViewportView(pickupTable);
-
-        javax.swing.GroupLayout customersPanel1Layout = new javax.swing.GroupLayout(customersPanel1);
-        customersPanel1.setLayout(customersPanel1Layout);
-        customersPanel1Layout.setHorizontalGroup(
-            customersPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(customersPanel1Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1348, Short.MAX_VALUE))
-        );
-        customersPanel1Layout.setVerticalGroup(
-            customersPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(customersPanel1Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(392, Short.MAX_VALUE))
-        );
-
-        tabpane1.addTab("PickUp", customersPanel1);
 
         jPanel3.setBackground(new java.awt.Color(153, 204, 255));
         jPanel3.setLayout(null);
@@ -1073,9 +1034,9 @@ public Admin(){
         inventoryPanel1.add(urltxt1);
         urltxt1.setBounds(540, 530, 220, 20);
 
-        tb2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        tb2.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        tb2.setModel(new javax.swing.table.DefaultTableModel(
+        pickupTable1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pickupTable1.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        pickupTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1083,14 +1044,14 @@ public Admin(){
 
             }
         ));
-        tb2.setToolTipText("");
-        tb2.setRowMargin(2);
-        tb2.addMouseListener(new java.awt.event.MouseAdapter() {
+        pickupTable1.setToolTipText("");
+        pickupTable1.setRowMargin(2);
+        pickupTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tb2MouseClicked(evt);
+                pickupTable1MouseClicked(evt);
             }
         });
-        jScrollPane12.setViewportView(tb2);
+        jScrollPane12.setViewportView(pickupTable1);
 
         inventoryPanel1.add(jScrollPane12);
         jScrollPane12.setBounds(40, 110, 820, 470);
@@ -1106,51 +1067,6 @@ public Admin(){
         ViewSelectedItem1.setBounds(20, 20, 150, 40);
 
         tabpane1.addTab("PickUps", inventoryPanel1);
-
-        jPanel4.setBackground(new java.awt.Color(153, 204, 255));
-        jPanel4.setLayout(null);
-
-        jLabel21.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel21.setText("Username:");
-        jPanel4.add(jLabel21);
-        jLabel21.setBounds(210, 130, 82, 23);
-
-        jLabel22.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel22.setText("Password:");
-        jPanel4.add(jLabel22);
-        jLabel22.setBounds(210, 160, 77, 23);
-        jPanel4.add(userName);
-        userName.setBounds(380, 120, 170, 30);
-        jPanel4.add(userPassword);
-        userPassword.setBounds(380, 150, 170, 30);
-
-        comboPosition.setBackground(new java.awt.Color(204, 255, 204));
-        comboPosition.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
-        comboPosition.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Admin", "SalesPerson", "WarehouseManager" }));
-        comboPosition.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboPositionActionPerformed(evt);
-            }
-        });
-        jPanel4.add(comboPosition);
-        comboPosition.setBounds(380, 183, 170, 30);
-
-        jLabel24.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel24.setText("Position");
-        jPanel4.add(jLabel24);
-        jLabel24.setBounds(210, 190, 140, 20);
-
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("Register");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-        jPanel4.add(jButton5);
-        jButton5.setBounds(290, 240, 110, 25);
-
-        tabpane1.addTab("Register", jPanel4);
 
         customersPanel.setBackground(new java.awt.Color(153, 204, 255));
 
@@ -1180,14 +1096,25 @@ public Admin(){
             }
         });
 
+        refresh.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        refresh.setText("Refresh");
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout customersPanelLayout = new javax.swing.GroupLayout(customersPanel);
         customersPanel.setLayout(customersPanelLayout);
         customersPanelLayout.setHorizontalGroup(
             customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(customersPanelLayout.createSequentialGroup()
                 .addGap(69, 69, 69)
-                .addGroup(customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
+                .addGroup(customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(customersPanelLayout.createSequentialGroup()
+                        .addComponent(refresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(1348, Short.MAX_VALUE))
         );
@@ -1195,13 +1122,73 @@ public Admin(){
             customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(customersPanelLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jButton1)
+                .addGroup(customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1)
+                    .addComponent(refresh))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(490, Short.MAX_VALUE))
         );
 
         tabpane1.addTab("Accounts", customersPanel);
+
+        jPanel4.setBackground(new java.awt.Color(153, 204, 255));
+        jPanel4.setLayout(null);
+
+        jLabel21.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel21.setText("Username:");
+        jPanel4.add(jLabel21);
+        jLabel21.setBounds(210, 130, 82, 23);
+
+        jLabel22.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel22.setText("Password:");
+        jPanel4.add(jLabel22);
+        jLabel22.setBounds(210, 160, 77, 23);
+
+        userName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                userNameKeyTyped(evt);
+            }
+        });
+        jPanel4.add(userName);
+        userName.setBounds(380, 120, 170, 30);
+        jPanel4.add(userPassword);
+        userPassword.setBounds(380, 150, 170, 30);
+
+        comboPosition.setBackground(new java.awt.Color(204, 255, 204));
+        comboPosition.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        comboPosition.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Admin", "SalesPerson", "WarehouseManager" }));
+        comboPosition.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboPositionActionPerformed(evt);
+            }
+        });
+        jPanel4.add(comboPosition);
+        comboPosition.setBounds(380, 210, 170, 30);
+
+        jLabel24.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel24.setText("Position");
+        jPanel4.add(jLabel24);
+        jLabel24.setBounds(210, 220, 140, 20);
+
+        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton5.setText("Register");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButton5);
+        jButton5.setBounds(290, 270, 110, 25);
+
+        jLabel3.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel3.setText("Phone:");
+        jPanel4.add(jLabel3);
+        jLabel3.setBounds(210, 190, 120, 23);
+        jPanel4.add(phone);
+        phone.setBounds(380, 180, 170, 30);
+
+        tabpane1.addTab("Register", jPanel4);
 
         jScrollPane7.setViewportView(tabpane1);
 
@@ -1634,7 +1621,7 @@ public Admin(){
         delete.setIcon(img);
     }//GEN-LAST:event_delete1MouseReleased
 
-    private void tb2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb2MouseClicked
+    private void pickupTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pickupTable1MouseClicked
         int row = tb.getSelectedRow();
         try{
             //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd", Locale.getDefault());
@@ -1662,7 +1649,7 @@ public Admin(){
             //PickupdesignViewProduct.productname.setText(costtxt.getText());
         }
         catch(Exception e){}
-    }//GEN-LAST:event_tb2MouseClicked
+    }//GEN-LAST:event_pickupTable1MouseClicked
 
     private void ViewSelectedItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewSelectedItem1ActionPerformed
         if(tb.getSelectedRow()==-1){
@@ -1758,16 +1745,21 @@ public Admin(){
                         JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
                     }          
                     else{
-                        pst.executeUpdate("Insert into admin(" + "fname," + "Password," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
+                        pst.executeUpdate("Insert into admin(" + "fname," + "Password,"  + "PhoneNumber," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "', '"+ phone.getText() +"','"+comboPosition.getSelectedItem()+"')");
                         //st2.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                         JOptionPane.showMessageDialog(null, "Account Created", "System Message", JOptionPane.INFORMATION_MESSAGE);
-                        CustomerAcc.namelbl.setText(userName.getText());
-                        //st.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
+                        userName.setText(null);
+                        //userAge.setText(null);
+                        userPassword.setText(null);
+//st.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                     }
                 }
                 catch (SQLException ex){
                     //Logger.getLogger(trial.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, "Record Already Exist", "System Message", JOptionPane.ERROR_MESSAGE);
+                    
+                    JOptionPane.showMessageDialog(null, ex);
+                    
+                    //JOptionPane.showMessageDialog(null, "Record Already Exist", "System Message", JOptionPane.ERROR_MESSAGE);
                     userName.setText(null);
                     //userAge.setText(null);
                     userPassword.setText(null);
@@ -1795,10 +1787,12 @@ public Admin(){
                         JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
                     }        
                     else{
-                        pst.executeUpdate("Insert into admin(" + "fname," + "Password," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
+                        pst.executeUpdate("Insert into admin(" + "fname," + "Password,"  + "PhoneNumber," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "', '"+ phone.getText() +"','"+comboPosition.getSelectedItem()+"')");
                         //st2.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                         JOptionPane.showMessageDialog(null, "Account Created", "System Message", JOptionPane.INFORMATION_MESSAGE);
-                        CustomerAcc.namelbl.setText(userName.getText());
+                        userName.setText(null);
+                        //userAge.setText(null);
+                        userPassword.setText(null);
                         //st.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                     }
                 }
@@ -1832,10 +1826,12 @@ public Admin(){
                         JOptionPane.showMessageDialog(null, "Username is Required", "System Message", JOptionPane.ERROR_MESSAGE);
                     } 
                     else{
-                        pst.executeUpdate("Insert into admin(" + "fname," + "Password," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "','"+comboPosition.getSelectedItem()+"')");
+                        pst.executeUpdate("Insert into admin(" + "fname," + "Password,"  + "PhoneNumber," + "userPosition" + ") VALUES ('" + userName.getText() + "','" + userPassword.getText() + "', '"+ phone.getText() +"','"+comboPosition.getSelectedItem()+"')");
                         //st2.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                         JOptionPane.showMessageDialog(null, "Account Created", "System Message", JOptionPane.INFORMATION_MESSAGE);
-                        CustomerAcc.namelbl.setText(userName.getText());
+                        userName.setText(null);
+                        //userAge.setText(null);
+                        userPassword.setText(null);
                         //st.executeUpdate("Insert into history(" + "Id,username," + "date" + ") VALUES ('" + userId.getText() + "','" + userName.getText() + "','" + userName.getText() + "')");
                     }
                 }
@@ -1926,6 +1922,21 @@ public Admin(){
             }
         }
     }//GEN-LAST:event_buyProductBtnActionPerformed
+
+    private void userNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userNameKeyTyped
+    }//GEN-LAST:event_userNameKeyTyped
+
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        try{
+        String sql = "SELECT AdminID, fname, Password, userPosition from admin";
+        pst = Conn.prepareStatement(sql);
+        rs = pst.executeQuery();
+        memberTable.setModel(DbUtils.resultSetToTableModel(rs));
+    }
+    catch(Exception e){
+        JOptionPane.showMessageDialog(null, e);
+    }
+    }//GEN-LAST:event_refreshActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1973,7 +1984,6 @@ public Admin(){
     private javax.swing.JComboBox cbxsearch2;
     private javax.swing.JComboBox comboPosition;
     private javax.swing.JPanel customersPanel;
-    private javax.swing.JPanel customersPanel1;
     private javax.swing.JLabel delete;
     private javax.swing.JLabel delete1;
     private javax.swing.JDesktopPane dpane;
@@ -1995,6 +2005,7 @@ public Admin(){
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
@@ -2008,10 +2019,11 @@ public Admin(){
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTable memberTable;
-    private javax.swing.JTable pickupTable;
+    private javax.swing.JTextField phone;
+    private javax.swing.JTable pickupTable1;
+    private javax.swing.JButton refresh;
     private javax.swing.JButton salem2m;
     private javax.swing.JButton salesm2m;
     private javax.swing.JTable salestbl;
@@ -2021,7 +2033,6 @@ public Admin(){
     private javax.swing.JTabbedPane tabpane1;
     private javax.swing.JTable tb;
     private javax.swing.JTable tb1;
-    private javax.swing.JTable tb2;
     private com.toedter.calendar.JDateChooser tom2;
     public static javax.swing.JTextField txtid;
     private javax.swing.JTextField txtsales;
