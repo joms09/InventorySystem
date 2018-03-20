@@ -775,7 +775,7 @@ public Admin(){
         inventoryPanel.add(ViewSelectedItem);
         ViewSelectedItem.setBounds(180, 20, 150, 40);
 
-        tabpane1.addTab("Inventory       ", inventoryPanel);
+        tabpane1.addTab("Inventory", inventoryPanel);
 
         customersPanel1.setBackground(new java.awt.Color(153, 204, 255));
 
@@ -898,7 +898,7 @@ public Admin(){
         jPanel3.add(fromm1);
         fromm1.setBounds(390, 30, 170, 30);
 
-        tabpane1.addTab("Sales               ", jPanel3);
+        tabpane1.addTab("Sales", jPanel3);
 
         jPanel1.setBackground(new java.awt.Color(153, 204, 255));
         jPanel1.setLayout(null);
